@@ -22,8 +22,8 @@ logic is implemented in Python.
 | 9     | Optional SIMD                              | Done          |
 | 10    | Python bindings (PyO3)                     | Done          |
 | 11    | NumPy support                              | Done          |
-| 12    | Pandas helpers                             | **Current**   |
-| 13    | Docs, examples, CI, publishing             | Pending       |
+| 12    | Pandas helpers                             | Done          |
+| 13    | Docs, examples, CI, publishing             | **Current**   |
 
 ## Goals
 
@@ -71,13 +71,12 @@ Optional features:
 ```bash
 cd python
 python3 -m venv .venv && source .venv/bin/activate
-pip install maturin pytest numpy
+pip install maturin pytest numpy pandas
 maturin develop
 pytest
 ```
 
-See [`python/README.md`](python/README.md) for scalar (Phase 10) and NumPy
-(Phase 11) APIs. Pandas helpers are Phase 12.
+See [`python/README.md`](python/README.md) for scalar, NumPy, and Pandas APIs.
 
 ## References
 

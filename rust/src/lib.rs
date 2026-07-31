@@ -25,7 +25,7 @@
 //! | [`simd`] (feature)       | 9     | Ready    |
 //! | Python bindings (`PyO3`) | 10    | Ready    |
 //! | `NumPy` batches          | 11    | Ready    |
-//! | Pandas helpers           | 12    | Planned  |
+//! | Pandas helpers           | 12    | Ready    |
 //!
 //! ## Error handling
 //!

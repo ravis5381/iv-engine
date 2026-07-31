@@ -21,7 +21,8 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0"]
+dev = ["pytest>=7.0", "pandas>=1.5"]
+pandas = ["pandas>=1.5"]
 
 [build-system]
 requires = ["maturin>=1.4,<2.0"]

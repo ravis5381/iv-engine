@@ -1,8 +1,7 @@
 """iv_engine — Python bindings for the Rust numerical core.
 
 All numerical work happens in Rust. This package re-exports the compiled
-extension [`iv_engine._core`] (scalar + NumPy batch APIs). Pandas helpers
-arrive in Phase 12.
+extension [`iv_engine._core`] (scalar + NumPy) and Pandas DataFrame helpers.
 """
 
 from __future__ import annotations
@@ -44,6 +43,14 @@ from iv_engine._core import (
     vegas,
     vomma,
 )
+from iv_engine.dataframe import (
+    black_prices_frame,
+    black_scholes_prices_frame,
+    deltas_frame,
+    gammas_frame,
+    implied_volatilities_frame,
+    vegas_frame,
+)
 
 __all__ = [
     "IVError",
@@ -52,20 +59,25 @@ __all__ = [
     "black_price",
     "black_price_total_vol",
     "black_prices",
+    "black_prices_frame",
     "black_scholes_delta",
     "black_scholes_forward",
     "black_scholes_gamma",
     "black_scholes_price",
     "black_scholes_prices",
+    "black_scholes_prices_frame",
     "black_scholes_theta",
     "black_scholes_vanna",
     "black_scholes_vega",
     "black_scholes_vomma",
     "delta",
     "deltas",
+    "deltas_frame",
     "gamma",
     "gammas",
+    "gammas_frame",
     "implied_volatilities",
+    "implied_volatilities_frame",
     "implied_volatility",
     "log_moneyness",
     "norm_cdf",
@@ -80,5 +92,6 @@ __all__ = [
     "vanna",
     "vega",
     "vegas",
+    "vegas_frame",
     "vomma",
 ]
