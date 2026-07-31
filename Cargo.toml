@@ -1,8 +1,7 @@
 # Workspace root for the iv-engine project.
 #
-# The Rust crate (`rust/`) is the numerical source of truth.
-# The Python package (`python/`) will be added as a maturin member
-# in Phase 10 and will only wrap the Rust API — no pricing logic in Python.
+# - `rust/`  — numerical source of truth (publishable crate)
+# - `python/` — PyO3 / maturin bindings (PyPI wheel; not published to crates.io)
 [workspace]
 resolver = "2"
 members = ["rust", "python"]

@@ -26,6 +26,7 @@
 //! | Python bindings (`PyO3`) | 10    | Ready    |
 //! | `NumPy` batches          | 11    | Ready    |
 //! | Pandas helpers           | 12    | Ready    |
+//! | Docs / CI / publishing   | 13    | Ready    |
 //!
 //! ## Error handling
 //!
