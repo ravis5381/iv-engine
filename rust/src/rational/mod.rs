@@ -2,7 +2,7 @@
 //!
 //! # Status
 //!
-//! Implemented in **Phase 5**, validated against the reference in **Phase 6**.
+//! Implemented in **Phase 5**, validated against the C++ reference in **Phase 6**.
 //!
 //! # Algorithm overview
 //!

@@ -15,9 +15,9 @@ logic is implemented in Python.
 | 2     | Normal PDF / CDF                           | Done          |
 | 3     | Black-76 / Black–Scholes pricing           | Done          |
 | 4     | Greeks                                     | Done          |
-| 5     | Let's Be Rational IV                       | **Current**   |
-| 6     | Reference validation                       | Pending       |
-| 7     | Vector API                                 | Pending       |
+| 5     | Let's Be Rational IV                       | Done          |
+| 6     | Reference validation                       | Done          |
+| 7     | Vector API                                 | **Current**   |
 | 8     | Rayon parallelism                          | Pending       |
 | 9     | Optional SIMD                              | Pending       |
 | 10–12 | Python / NumPy / Pandas                    | Pending       |

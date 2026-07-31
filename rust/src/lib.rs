@@ -19,7 +19,7 @@
 //! | [`black_price`]          | 3     | Ready    |
 //! | [`black_scholes_price`]  | 3     | Ready    |
 //! | [`greeks`]               | 4     | Ready    |
-//! | Implied volatility (LBR) | 5     | Ready    |
+//! | Implied volatility (LBR) | 5–6   | Ready    |
 //! | Vector / parallel / SIMD | 7–9   | Planned  |
 //!
 //! ## Error handling

@@ -14,12 +14,20 @@ use crate::errors::IVError;
 
 const LBR_ITERATIONS: u32 = 2;
 
+/// Middle-branch Householder refinement.
+///
+/// Matches the C++ loop condition `iterations < N && fabs(ds) > DBL_EPSILON * s`.
+/// The early exit is essential: when the rational guess lands exactly on a
+/// bracket edge (e.g. `s == s_c` for `β == b_c`), a further forced iteration
+/// would treat the edge as "outside the open bracket" and binary-nest away
+/// from the already-correct root.
 #[inline]
 fn refine(beta: f64, x: f64, mut s: f64, mut left: f64, mut right: f64, iterations: u32) -> f64 {
     let mut ds = -DBL_MAX;
     let mut previous = 0.0;
     let mut reversals = 0;
-    for n in 0..iterations {
+    let mut n = 0u32;
+    while n < iterations && ds.abs() > DBL_EPSILON * s {
         if ds * previous < 0.0 {
             reversals += 1;
         }
@@ -49,6 +57,7 @@ fn refine(beta: f64, x: f64, mut s: f64, mut left: f64, mut right: f64, iteratio
         }
         ds = ds.max(-0.5 * s);
         s += ds;
+        n += 1;
     }
     s
 }
@@ -148,29 +157,48 @@ fn refine_lower(
     mut right: f64,
     iterations: u32,
 ) -> f64 {
-    for _ in 0..iterations {
+    let mut ds = -DBL_MAX;
+    let mut previous = 0.0;
+    let mut reversals = 0;
+    let mut n = 0u32;
+    while n < iterations && ds.abs() > DBL_EPSILON * s {
+        if ds * previous < 0.0 {
+            reversals += 1;
+        }
+        if n > 0 && (reversals == 3 || !(s > left && s < right)) {
+            s = 0.5 * (left + right);
+            if right - left <= DBL_EPSILON * s {
+                break;
+            }
+            reversals = 0;
+            ds = 0.0;
+        }
+        previous = ds;
         let b = normalised_black_call(x, s);
         let bp = normalised_vega(x, s);
-        if b > beta {
+        if b > beta && s < right {
             right = s;
-        } else {
+        } else if b < beta && s > left {
             left = s;
         }
         if b <= 0.0 || bp <= 0.0 {
-            s = 0.5 * (left + right);
-            continue;
+            ds = 0.5 * (left + right) - s;
+        } else {
+            let lb = b.ln();
+            let lbeta = beta.ln();
+            let bpob = bp / b;
+            let h = x / s;
+            let bh = h * h / s - s / 4.0;
+            let newton = (lbeta - lb) * lb / lbeta / bpob;
+            let halley = bh - bpob * (1.0 + 2.0 / lb);
+            let hh3 = bh * bh - 3.0 * (h / s).powi(2) - 0.25
+                + 2.0 * bpob.powi(2) * (1.0 + 3.0 / lb * (1.0 + 1.0 / lb))
+                - 3.0 * bh * bpob * (1.0 + 2.0 / lb);
+            ds = newton * householder_factor(newton, halley, hh3);
         }
-        let lb = b.ln();
-        let lbeta = beta.ln();
-        let bpob = bp / b;
-        let h = x / s;
-        let bh = h * h / s - s / 4.0;
-        let newton = (lbeta - lb) * lb / lbeta / bpob;
-        let halley = bh - bpob * (1.0 + 2.0 / lb);
-        let hh3 = bh * bh - 3.0 * (h / s).powi(2) - 0.25
-            + 2.0 * bpob.powi(2) * (1.0 + 3.0 / lb * (1.0 + 1.0 / lb))
-            - 3.0 * bh * bpob * (1.0 + 2.0 / lb);
-        s += (newton * householder_factor(newton, halley, hh3)).max(-0.5 * s);
+        ds = ds.max(-0.5 * s);
+        s += ds;
+        n += 1;
     }
     s
 }
@@ -185,27 +213,46 @@ fn refine_upper(
     b_max: f64,
     iterations: u32,
 ) -> f64 {
-    for _ in 0..iterations {
+    let mut ds = -DBL_MAX;
+    let mut previous = 0.0;
+    let mut reversals = 0;
+    let mut n = 0u32;
+    while n < iterations && ds.abs() > DBL_EPSILON * s {
+        if ds * previous < 0.0 {
+            reversals += 1;
+        }
+        if n > 0 && (reversals == 3 || !(s > left && s < right)) {
+            s = 0.5 * (left + right);
+            if right - left <= DBL_EPSILON * s {
+                break;
+            }
+            reversals = 0;
+            ds = 0.0;
+        }
+        previous = ds;
         let b = normalised_black_call(x, s);
         let bp = normalised_vega(x, s);
-        if b > beta {
+        if b > beta && s < right {
             right = s;
-        } else {
+        } else if b < beta && s > left {
             left = s;
         }
         if b >= b_max || bp <= DBL_MIN {
-            s = 0.5 * (left + right);
-            continue;
+            ds = 0.5 * (left + right) - s;
+        } else {
+            let mb = b_max - b;
+            let g = ((b_max - beta) / mb).ln();
+            let gp = bp / mb;
+            let bh = (x / s).powi(2) / s - s / 4.0;
+            let hh = bh * bh - 3.0 * (x / (s * s)).powi(2) - 0.25;
+            let newton = -g / gp;
+            let halley = bh + gp;
+            let hh3 = hh + gp * (2.0 * gp + 3.0 * bh);
+            ds = newton * householder_factor(newton, halley, hh3);
         }
-        let mb = b_max - b;
-        let g = ((b_max - beta) / mb).ln();
-        let gp = bp / mb;
-        let bh = (x / s).powi(2) / s - s / 4.0;
-        let hh = bh * bh - 3.0 * (x / (s * s)).powi(2) - 0.25;
-        let newton = -g / gp;
-        let halley = bh + gp;
-        let hh3 = hh + gp * (2.0 * gp + 3.0 * bh);
-        s += (newton * householder_factor(newton, halley, hh3)).max(-0.5 * s);
+        ds = ds.max(-0.5 * s);
+        s += ds;
+        n += 1;
     }
     s
 }
