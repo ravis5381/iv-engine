@@ -19,8 +19,8 @@ logic is implemented in Python.
 | 6     | Reference validation                       | Done          |
 | 7     | Vector API                                 | Done          |
 | 8     | Rayon parallelism                          | Done          |
-| 9     | Optional SIMD                              | **Current**   |
-| 10–12 | Python / NumPy / Pandas                    | Pending       |
+| 9     | Optional SIMD                              | Done          |
+| 10–12 | Python / NumPy / Pandas                    | **Current**   |
 | 13    | Docs, examples, CI, publishing             | Pending       |
 
 ## Goals
@@ -47,6 +47,8 @@ iv-engine/
 cd iv-engine
 cargo test -p iv-engine
 cargo test -p iv-engine --features rayon
+cargo test -p iv-engine --features simd
+cargo test -p iv-engine --all-features
 cargo clippy -p iv-engine --all-targets --all-features -- -D warnings
 cargo fmt --check
 cargo bench -p iv-engine --bench normal
@@ -55,9 +57,12 @@ cargo bench -p iv-engine --bench greeks
 cargo bench -p iv-engine --bench implied_volatility
 cargo bench -p iv-engine --bench vector
 cargo bench -p iv-engine --features rayon --bench parallel
+cargo bench -p iv-engine --features simd --bench simd
 ```
 
-Optional features: `rayon` enables `*_slice_par` parallel batch APIs.
+Optional features:
+- `rayon` — `*_slice_par` parallel batch APIs
+- `simd` — portable `wide::f64x4` Normal PDF batches (`norm_pdf_slice`)
 
 ## References
 

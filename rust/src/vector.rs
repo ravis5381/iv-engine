@@ -25,8 +25,9 @@
 //!
 //! ## Parallelism / SIMD
 //!
-//! These loops are sequential. Rayon (Phase 8) and SIMD (Phase 9) build on
-//! the same scalar kernels without changing this contract.
+//! These loops are sequential. Rayon ([`crate::parallel`]) parallelises the
+//! same scalar kernels across threads. Portable SIMD ([`crate::simd`])
+//! accelerates Normal PDF batches; LBR IV stays scalar by design.
 
 use crate::black::black_price;
 use crate::black_scholes::black_scholes_price;

@@ -22,7 +22,8 @@
 //! | Implied volatility (LBR) | 5–6   | Ready    |
 //! | [`vector`] batch APIs    | 7     | Ready    |
 //! | [`parallel`] (feature)   | 8     | Ready    |
-//! | Optional SIMD            | 9     | Planned  |
+//! | [`simd`] (feature)       | 9     | Ready    |
+//! | Python / `NumPy` / Pandas | 10–12 | Planned  |
 //!
 //! ## Error handling
 //!
@@ -46,6 +47,7 @@ pub mod greeks;
 pub mod normal;
 pub mod parallel;
 pub mod rational;
+pub mod simd;
 pub mod vector;
 
 pub use black::{black_intrinsic, black_price, black_price_total_vol, log_moneyness};
@@ -66,6 +68,7 @@ pub use parallel::{
     vega_slice_par, MIN_PARALLEL,
 };
 pub use rational::{implied_volatility, normalised_implied_volatility};
+pub use simd::{norm_cdf_c_slice, norm_cdf_slice, norm_pdf_slice, simd_enabled, SIMD_LANES};
 pub use vector::{
     black_price_slice, black_scholes_price_slice, delta_slice, gamma_slice,
     implied_volatility_slice, normalised_implied_volatility_slice, vega_slice,
