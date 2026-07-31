@@ -20,7 +20,8 @@
 //! | [`black_scholes_price`]  | 3     | Ready    |
 //! | [`greeks`]               | 4     | Ready    |
 //! | Implied volatility (LBR) | 5–6   | Ready    |
-//! | Vector / parallel / SIMD | 7–9   | Planned  |
+//! | [`vector`] batch APIs    | 7     | Ready    |
+//! | Parallel / SIMD          | 8–9   | Planned  |
 //!
 //! ## Error handling
 //!
@@ -59,3 +60,7 @@ pub use greeks::{
 };
 pub use normal::{norm_cdf, norm_cdf_c, norm_pdf};
 pub use rational::{implied_volatility, normalised_implied_volatility};
+pub use vector::{
+    black_price_slice, black_scholes_price_slice, delta_slice, gamma_slice,
+    implied_volatility_slice, normalised_implied_volatility_slice, vega_slice,
+};

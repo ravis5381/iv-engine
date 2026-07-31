@@ -45,6 +45,10 @@ harness = false
 name = "implied_volatility"
 harness = false
 
+[[bench]]
+name = "vector"
+harness = false
+
 [lints.rust]
 unsafe_code = "warn"
 missing_docs = "warn"

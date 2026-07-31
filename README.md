@@ -17,8 +17,8 @@ logic is implemented in Python.
 | 4     | Greeks                                     | Done          |
 | 5     | Let's Be Rational IV                       | Done          |
 | 6     | Reference validation                       | Done          |
-| 7     | Vector API                                 | **Current**   |
-| 8     | Rayon parallelism                          | Pending       |
+| 7     | Vector API                                 | Done          |
+| 8     | Rayon parallelism                          | **Current**   |
 | 9     | Optional SIMD                              | Pending       |
 | 10–12 | Python / NumPy / Pandas                    | Pending       |
 | 13    | Docs, examples, CI, publishing             | Pending       |
@@ -52,6 +52,7 @@ cargo bench -p iv-engine --bench normal
 cargo bench -p iv-engine --bench black
 cargo bench -p iv-engine --bench greeks
 cargo bench -p iv-engine --bench implied_volatility
+cargo bench -p iv-engine --bench vector
 ```
 
 ## References

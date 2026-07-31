@@ -98,6 +98,8 @@ fn modules_are_linked_with_implemented_apis() {
     let price = iv_engine::black_price(100.0, 100.0, 1.0, 0.2, true).unwrap();
     let iv = iv_engine::implied_volatility(price, 100.0, 100.0, 1.0, true).unwrap();
     assert!((iv - 0.2).abs() < 1e-12, "recovered {iv}");
-    assert_eq!(iv_engine::vector::PHASE, 7);
+    let mut out = [0.0];
+    iv_engine::black_price_slice(&[100.0], &[100.0], &[1.0], &[0.2], true, &mut out).unwrap();
+    assert!(out[0] > 0.0);
     assert_eq!(iv_engine::parallel::PHASE, 8);
 }
