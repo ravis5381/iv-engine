@@ -12,8 +12,8 @@ logic is implemented in Python.
 | Phase | Scope                                      | Status        |
 |-------|--------------------------------------------|---------------|
 | 1     | Workspace, errors, constants, module shells | Done          |
-| 2     | Normal PDF / CDF                           | **Current**   |
-| 3     | Black-76 pricing                           | Pending       |
+| 2     | Normal PDF / CDF                           | Done          |
+| 3     | Black-76 / Black–Scholes pricing           | **Current**   |
 | 4     | Greeks                                     | Pending       |
 | 5     | Let's Be Rational IV                       | Pending       |
 | 6     | Reference validation                       | Pending       |
@@ -49,6 +49,7 @@ cargo test -p iv-engine
 cargo clippy -p iv-engine --all-targets -- -D warnings
 cargo fmt --check
 cargo bench -p iv-engine --bench normal
+cargo bench -p iv-engine --bench black
 ```
 
 ## References

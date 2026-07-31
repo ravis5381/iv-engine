@@ -33,6 +33,10 @@ criterion = { version = "0.5", default-features = false, features = ["cargo_benc
 name = "normal"
 harness = false
 
+[[bench]]
+name = "black"
+harness = false
+
 [lints.rust]
 unsafe_code = "warn"
 missing_docs = "warn"

@@ -16,8 +16,8 @@
 //! | [`errors::IVError`]      | 1     | Ready    |
 //! | [`constants`]            | 1     | Ready    |
 //! | [`normal`] PDF / CDF     | 2     | Ready    |
-//! | Black-76 price           | 3     | Planned  |
-//! | Black–Scholes price      | 3     | Planned  |
+//! | [`black_price`]          | 3     | Ready    |
+//! | [`black_scholes_price`]  | 3     | Ready    |
 //! | Greeks                   | 4     | Planned  |
 //! | Implied volatility (LBR) | 5     | Planned  |
 //! | Vector / parallel / SIMD | 7–9   | Planned  |
@@ -46,9 +46,11 @@ pub mod parallel;
 pub mod rational;
 pub mod vector;
 
+pub use black::{black_intrinsic, black_price, black_price_total_vol, log_moneyness};
+pub use black_scholes::{black_scholes_forward, black_scholes_price};
 pub use constants::{
     DBL_EPSILON, DBL_MAX, DBL_MIN, MIN_FORWARD, MIN_MATURITY, MIN_STRIKE, ONE_OVER_SQRT_TWO_PI,
-    SQRT_PI_OVER_TWO, SQRT_TWO, SQRT_TWO_PI, TWO_PI,
+    PRICE_ROUNDTRIP_ABS, PRICE_ROUNDTRIP_TOL, SQRT_PI_OVER_TWO, SQRT_TWO, SQRT_TWO_PI, TWO_PI,
 };
 pub use errors::IVError;
 pub use normal::{norm_cdf, norm_cdf_c, norm_pdf};

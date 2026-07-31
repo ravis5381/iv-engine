@@ -90,11 +90,10 @@ fn rejects_non_finite_via_helper() {
 
 #[test]
 fn modules_are_linked_with_phase_markers() {
-    // Touch each still-pending public module path so missing files fail here.
-    // `normal` is implemented (Phase 2) — exercise it via the real API.
+    // Exercise implemented APIs; touch pending modules via phase markers.
     assert!(iv_engine::norm_pdf(0.0) > 0.0);
-    assert_eq!(iv_engine::black::PHASE, 3);
-    assert_eq!(iv_engine::black_scholes::PHASE, 3);
+    assert!(iv_engine::black_price(100.0, 100.0, 1.0, 0.2, true).unwrap() > 0.0);
+    assert!(iv_engine::black_scholes_price(100.0, 100.0, 1.0, 0.0, 0.0, 0.2, true).unwrap() > 0.0);
     assert_eq!(iv_engine::greeks::PHASE, 4);
     assert_eq!(iv_engine::rational::PHASE, 5);
     assert_eq!(iv_engine::rational::interpolation::PHASE, 5);
