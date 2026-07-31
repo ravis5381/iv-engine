@@ -20,7 +20,9 @@ logic is implemented in Python.
 | 7     | Vector API                                 | Done          |
 | 8     | Rayon parallelism                          | Done          |
 | 9     | Optional SIMD                              | Done          |
-| 10–12 | Python / NumPy / Pandas                    | **Current**   |
+| 10    | Python bindings (PyO3)                     | Done          |
+| 11    | NumPy support                              | **Current**   |
+| 12    | Pandas helpers                             | Pending       |
 | 13    | Docs, examples, CI, publishing             | Pending       |
 
 ## Goals
@@ -34,9 +36,9 @@ logic is implemented in Python.
 
 ```text
 iv-engine/
-├── Cargo.toml          # workspace
-├── rust/               # numerical core (this crate)
-├── python/             # PyO3 / maturin bindings (later)
+├── Cargo.toml          # workspace (rust + python)
+├── rust/               # numerical core
+├── python/             # PyO3 / maturin bindings
 ├── examples/
 └── docs/
 ```
@@ -63,6 +65,19 @@ cargo bench -p iv-engine --features simd --bench simd
 Optional features:
 - `rayon` — `*_slice_par` parallel batch APIs
 - `simd` — portable `wide::f64x4` Normal PDF batches (`norm_pdf_slice`)
+
+## Building (Python)
+
+```bash
+cd python
+python3 -m venv .venv && source .venv/bin/activate
+pip install maturin pytest
+maturin develop
+pytest
+```
+
+See [`python/README.md`](python/README.md) for the scalar API (Phase 10).
+NumPy array support is Phase 11.
 
 ## References
 

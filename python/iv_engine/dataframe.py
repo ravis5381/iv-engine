@@ -1,1 +1,1 @@
-"""Pandas DataFrame helpers (Phase 12)."""
+"""Pandas DataFrame helpers — Phase 12."""

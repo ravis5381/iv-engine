@@ -5,7 +5,7 @@
 # in Phase 10 and will only wrap the Rust API — no pricing logic in Python.
 [workspace]
 resolver = "2"
-members = ["rust"]
+members = ["rust", "python"]
 
 [workspace.package]
 version = "0.1.0"

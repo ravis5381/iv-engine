@@ -1,0 +1,30 @@
+[package]
+name = "iv-engine-py"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Python bindings (PyO3) for iv-engine"
+publish = false
+
+[lib]
+name = "iv_engine"
+crate-type = ["cdylib"]
+path = "src/lib.rs"
+
+[dependencies]
+iv-engine = { path = "../rust" }
+pyo3 = { version = "0.22", features = ["extension-module"] }
+
+[lints.rust]
+unsafe_code = "warn"
+missing_docs = "allow"
+unexpected_cfgs = { level = "allow", check-cfg = ["cfg(feature, values(\"gil-refs\"))"] }
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+too_many_arguments = { level = "allow", priority = 1 }
+useless_conversion = { level = "allow", priority = 1 }
+doc_markdown = { level = "allow", priority = 1 }

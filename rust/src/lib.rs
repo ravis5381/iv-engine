@@ -23,7 +23,8 @@
 //! | [`vector`] batch APIs    | 7     | Ready    |
 //! | [`parallel`] (feature)   | 8     | Ready    |
 //! | [`simd`] (feature)       | 9     | Ready    |
-//! | Python / `NumPy` / Pandas | 10–12 | Planned  |
+//! | Python bindings (`PyO3`) | 10    | Ready    |
+//! | `NumPy` / Pandas         | 11–12 | Planned  |
 //!
 //! ## Error handling
 //!
