@@ -40,7 +40,7 @@ use crate::rational::{implied_volatility, normalised_implied_volatility};
 /// A batch is empty (`Ok(0)`) when every length is `0` or `1` and at least
 /// one length is `0`.
 #[inline]
-fn resolve_batch_len(lengths: &[usize]) -> Result<usize, IVError> {
+pub(crate) fn resolve_batch_len(lengths: &[usize]) -> Result<usize, IVError> {
     if lengths.contains(&0) {
         if lengths.iter().any(|&len| len > 1) {
             return Err(IVError::invalid(
@@ -69,7 +69,7 @@ fn resolve_batch_len(lengths: &[usize]) -> Result<usize, IVError> {
 }
 
 #[inline]
-const fn require_out_len(out_len: usize, n: usize) -> Result<(), IVError> {
+pub(crate) const fn require_out_len(out_len: usize, n: usize) -> Result<(), IVError> {
     if out_len != n {
         return Err(IVError::invalid(
             "output slice length must equal the resolved batch length",
@@ -79,7 +79,7 @@ const fn require_out_len(out_len: usize, n: usize) -> Result<(), IVError> {
 }
 
 #[inline]
-fn at(slice: &[f64], i: usize) -> f64 {
+pub(crate) fn at(slice: &[f64], i: usize) -> f64 {
     // SAFETY of indexing: callers only invoke with i < n and slice.len() is
     // either 1 or n (enforced by resolve_batch_len + require_out_len).
     if slice.len() == 1 {
@@ -90,7 +90,7 @@ fn at(slice: &[f64], i: usize) -> f64 {
 }
 
 #[inline]
-fn write_or_nan(out: &mut f64, result: Result<f64, IVError>) {
+pub(crate) fn write_or_nan(out: &mut f64, result: Result<f64, IVError>) {
     *out = result.unwrap_or(f64::NAN);
 }
 

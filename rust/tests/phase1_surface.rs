@@ -101,5 +101,8 @@ fn modules_are_linked_with_implemented_apis() {
     let mut out = [0.0];
     iv_engine::black_price_slice(&[100.0], &[100.0], &[1.0], &[0.2], true, &mut out).unwrap();
     assert!(out[0] > 0.0);
-    assert_eq!(iv_engine::parallel::PHASE, 8);
+    let mut par_out = [0.0];
+    iv_engine::black_price_slice_par(&[100.0], &[100.0], &[1.0], &[0.2], true, &mut par_out)
+        .unwrap();
+    assert_eq!(out[0], par_out[0]);
 }

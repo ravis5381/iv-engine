@@ -21,7 +21,8 @@
 //! | [`greeks`]               | 4     | Ready    |
 //! | Implied volatility (LBR) | 5–6   | Ready    |
 //! | [`vector`] batch APIs    | 7     | Ready    |
-//! | Parallel / SIMD          | 8–9   | Planned  |
+//! | [`parallel`] (feature)   | 8     | Ready    |
+//! | Optional SIMD            | 9     | Planned  |
 //!
 //! ## Error handling
 //!
@@ -59,6 +60,11 @@ pub use greeks::{
     black_scholes_vega, black_scholes_vomma, delta, gamma, theta, vanna, vega, vomma,
 };
 pub use normal::{norm_cdf, norm_cdf_c, norm_pdf};
+pub use parallel::{
+    black_price_slice_par, black_scholes_price_slice_par, delta_slice_par, gamma_slice_par,
+    implied_volatility_slice_par, normalised_implied_volatility_slice_par, rayon_enabled,
+    vega_slice_par, MIN_PARALLEL,
+};
 pub use rational::{implied_volatility, normalised_implied_volatility};
 pub use vector::{
     black_price_slice, black_scholes_price_slice, delta_slice, gamma_slice,

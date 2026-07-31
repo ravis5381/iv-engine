@@ -18,8 +18,8 @@ logic is implemented in Python.
 | 5     | Let's Be Rational IV                       | Done          |
 | 6     | Reference validation                       | Done          |
 | 7     | Vector API                                 | Done          |
-| 8     | Rayon parallelism                          | **Current**   |
-| 9     | Optional SIMD                              | Pending       |
+| 8     | Rayon parallelism                          | Done          |
+| 9     | Optional SIMD                              | **Current**   |
 | 10–12 | Python / NumPy / Pandas                    | Pending       |
 | 13    | Docs, examples, CI, publishing             | Pending       |
 
@@ -46,14 +46,18 @@ iv-engine/
 ```bash
 cd iv-engine
 cargo test -p iv-engine
-cargo clippy -p iv-engine --all-targets -- -D warnings
+cargo test -p iv-engine --features rayon
+cargo clippy -p iv-engine --all-targets --all-features -- -D warnings
 cargo fmt --check
 cargo bench -p iv-engine --bench normal
 cargo bench -p iv-engine --bench black
 cargo bench -p iv-engine --bench greeks
 cargo bench -p iv-engine --bench implied_volatility
 cargo bench -p iv-engine --bench vector
+cargo bench -p iv-engine --features rayon --bench parallel
 ```
+
+Optional features: `rayon` enables `*_slice_par` parallel batch APIs.
 
 ## References
 

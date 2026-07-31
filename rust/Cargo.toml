@@ -22,12 +22,16 @@ crate-type = ["rlib"]
 [dependencies]
 # Portable erf/erfc — std `f64::erfc` remains unstable on current stable Rust.
 libm = "0.2"
-# Later phases may add: rayon (parallel), wide/packed_simd (SIMD).
+rayon = { version = "1.10", optional = true }
 # Python bindings live in a separate crate and must not pollute this core.
+
+[features]
+default = []
+# Enables Rayon-backed `*_slice_par` batch APIs in `parallel`.
+rayon = ["dep:rayon"]
 
 [dev-dependencies]
 criterion = { version = "0.5", default-features = false, features = ["cargo_bench_support"] }
-# proptest / approx arrive in later phases when pricing/IV exist.
 
 [[bench]]
 name = "normal"
@@ -47,6 +51,10 @@ harness = false
 
 [[bench]]
 name = "vector"
+harness = false
+
+[[bench]]
+name = "parallel"
 harness = false
 
 [lints.rust]
