@@ -21,8 +21,8 @@ logic is implemented in Python.
 | 8     | Rayon parallelism                          | Done          |
 | 9     | Optional SIMD                              | Done          |
 | 10    | Python bindings (PyO3)                     | Done          |
-| 11    | NumPy support                              | **Current**   |
-| 12    | Pandas helpers                             | Pending       |
+| 11    | NumPy support                              | Done          |
+| 12    | Pandas helpers                             | **Current**   |
 | 13    | Docs, examples, CI, publishing             | Pending       |
 
 ## Goals
@@ -71,13 +71,13 @@ Optional features:
 ```bash
 cd python
 python3 -m venv .venv && source .venv/bin/activate
-pip install maturin pytest
+pip install maturin pytest numpy
 maturin develop
 pytest
 ```
 
-See [`python/README.md`](python/README.md) for the scalar API (Phase 10).
-NumPy array support is Phase 11.
+See [`python/README.md`](python/README.md) for scalar (Phase 10) and NumPy
+(Phase 11) APIs. Pandas helpers are Phase 12.
 
 ## References
 

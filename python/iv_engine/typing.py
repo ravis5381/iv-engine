@@ -1,11 +1,14 @@
-"""Typing aliases for the public Python API.
-
-Phase 10 exposes scalar ``float`` callables. Array / DataFrame aliases arrive
-with NumPy (Phase 11) and Pandas (Phase 12).
-"""
+"""Typing aliases for the public Python API."""
 
 from __future__ import annotations
 
-Float = float
+from typing import Union
 
-__all__ = ["Float"]
+import numpy as np
+from numpy.typing import NDArray
+
+Float = float
+FloatArray = NDArray[np.float64]
+FloatOrArray = Union[float, FloatArray]
+
+__all__ = ["Float", "FloatArray", "FloatOrArray"]

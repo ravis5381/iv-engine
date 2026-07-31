@@ -4,12 +4,13 @@
 //!
 //! This crate contains **no pricing or root-finding logic**. Every public
 //! Python function delegates to the corresponding Rust API in `iv-engine`.
-//! `NumPy` / Pandas vectorization arrives in later phases; Phase 10 exposes
-//! scalar callables only.
+//! Phase 10: scalar callables. Phase 11: `NumPy` array batches.
 
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::useless_conversion)] // PyO3 `PyResult` / `map_err` false positives
 #![allow(missing_docs)]
+
+mod numpy_api;
 
 use pyo3::create_exception;
 use pyo3::exceptions::PyException;
@@ -17,7 +18,7 @@ use pyo3::prelude::*;
 
 create_exception!(iv_engine, IVError, PyException);
 
-fn map_err(err: iv_engine::IVError) -> PyErr {
+pub(crate) fn map_err(err: iv_engine::IVError) -> PyErr {
     IVError::new_err((err.code(), err.to_string()))
 }
 
@@ -259,6 +260,8 @@ fn _core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(black_scholes_theta, m)?)?;
     m.add_function(wrap_pyfunction!(black_scholes_vomma, m)?)?;
     m.add_function(wrap_pyfunction!(black_scholes_vanna, m)?)?;
+
+    numpy_api::register(m)?;
 
     Ok(())
 }

@@ -1,8 +1,8 @@
 """iv_engine — Python bindings for the Rust numerical core.
 
-All numerical work happens in Rust. This package only re-exports the
-compiled extension [`iv_engine._core`]. NumPy and Pandas helpers arrive in
-Phases 11–12.
+All numerical work happens in Rust. This package re-exports the compiled
+extension [`iv_engine._core`] (scalar + NumPy batch APIs). Pandas helpers
+arrive in Phase 12.
 """
 
 from __future__ import annotations
@@ -13,25 +13,35 @@ from iv_engine._core import (
     black_intrinsic,
     black_price,
     black_price_total_vol,
+    black_prices,
     black_scholes_delta,
     black_scholes_forward,
     black_scholes_gamma,
     black_scholes_price,
+    black_scholes_prices,
     black_scholes_theta,
     black_scholes_vanna,
     black_scholes_vega,
     black_scholes_vomma,
     delta,
+    deltas,
     gamma,
+    gammas,
+    implied_volatilities,
     implied_volatility,
     log_moneyness,
     norm_cdf,
     norm_cdf_c,
+    norm_cdf_cs,
+    norm_cdfs,
     norm_pdf,
+    norm_pdfs,
+    normalised_implied_volatilities,
     normalised_implied_volatility,
     theta,
     vanna,
     vega,
+    vegas,
     vomma,
 )
 
@@ -41,24 +51,34 @@ __all__ = [
     "black_intrinsic",
     "black_price",
     "black_price_total_vol",
+    "black_prices",
     "black_scholes_delta",
     "black_scholes_forward",
     "black_scholes_gamma",
     "black_scholes_price",
+    "black_scholes_prices",
     "black_scholes_theta",
     "black_scholes_vanna",
     "black_scholes_vega",
     "black_scholes_vomma",
     "delta",
+    "deltas",
     "gamma",
+    "gammas",
+    "implied_volatilities",
     "implied_volatility",
     "log_moneyness",
     "norm_cdf",
     "norm_cdf_c",
+    "norm_cdf_cs",
+    "norm_cdfs",
     "norm_pdf",
+    "norm_pdfs",
+    "normalised_implied_volatilities",
     "normalised_implied_volatility",
     "theta",
     "vanna",
     "vega",
+    "vegas",
     "vomma",
 ]

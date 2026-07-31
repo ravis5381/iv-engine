@@ -40,6 +40,20 @@ use crate::rational::{implied_volatility, normalised_implied_volatility};
 /// Each length must be `1` (broadcast) or equal to the unique non-1 length.
 /// A batch is empty (`Ok(0)`) when every length is `0` or `1` and at least
 /// one length is `0`.
+///
+/// # Errors
+///
+/// [`IVError::InvalidInput`] on length / broadcast mismatch.
+#[inline]
+pub fn batch_len(lengths: &[usize]) -> Result<usize, IVError> {
+    resolve_batch_len(lengths)
+}
+
+/// Resolve the common batch length from input slice lengths.
+///
+/// Each length must be `1` (broadcast) or equal to the unique non-1 length.
+/// A batch is empty (`Ok(0)`) when every length is `0` or `1` and at least
+/// one length is `0`.
 #[inline]
 pub(crate) fn resolve_batch_len(lengths: &[usize]) -> Result<usize, IVError> {
     if lengths.contains(&0) {

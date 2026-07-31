@@ -24,7 +24,8 @@
 //! | [`parallel`] (feature)   | 8     | Ready    |
 //! | [`simd`] (feature)       | 9     | Ready    |
 //! | Python bindings (`PyO3`) | 10    | Ready    |
-//! | `NumPy` / Pandas         | 11–12 | Planned  |
+//! | `NumPy` batches          | 11    | Ready    |
+//! | Pandas helpers           | 12    | Planned  |
 //!
 //! ## Error handling
 //!
@@ -71,6 +72,6 @@ pub use parallel::{
 pub use rational::{implied_volatility, normalised_implied_volatility};
 pub use simd::{norm_cdf_c_slice, norm_cdf_slice, norm_pdf_slice, simd_enabled, SIMD_LANES};
 pub use vector::{
-    black_price_slice, black_scholes_price_slice, delta_slice, gamma_slice,
+    batch_len, black_price_slice, black_scholes_price_slice, delta_slice, gamma_slice,
     implied_volatility_slice, normalised_implied_volatility_slice, vega_slice,
 };
