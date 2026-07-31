@@ -1,16 +1,19 @@
-# Local develop / pytest config when working inside `python/`.
-# For pip installs from a clone, prefer the workspace-root pyproject.toml:
+# Packaging root for the Python wheel (maturin).
+#
+# Install from a clone with a Rust toolchain available:
 #
 #   pip install .
+#   pip install '.[pandas]'
 #   pip install -e '.[dev]'
 #
-# This file remains so `cd python && maturin develop` keeps working.
+# The numerical core lives in `rust/`; bindings in `python/`. Putting this file
+# at the Cargo workspace root lets the sdist include both crates.
 
 [project]
 name = "iv-engine"
 version = "0.1.0"
 description = "Implied volatility and Black/Black-Scholes via Let's Be Rational"
-readme = "README.md"
+readme = "python/README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [{ name = "iv-engine contributors" }]
@@ -32,18 +35,21 @@ classifiers = [
 dev = ["pytest>=7.0", "pandas>=1.5"]
 pandas = ["pandas>=1.5"]
 
+[project.urls]
+Repository = "ssh://git@git_server/ravi.singh/bsm-iv-engine.git"
+
 [build-system]
 requires = ["maturin>=1.4,<2.0"]
 build-backend = "maturin"
 
 [tool.maturin]
-manifest-path = "Cargo.toml"
+manifest-path = "python/Cargo.toml"
 module-name = "iv_engine._core"
-python-source = "."
+python-source = "python"
 features = ["pyo3/extension-module"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["python/tests"]
 markers = [
     "profile: large (1M-row) timing benchmarks; run with: pytest -m profile -s",
 ]

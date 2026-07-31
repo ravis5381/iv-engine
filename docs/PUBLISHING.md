@@ -23,18 +23,29 @@ Docs.rs builds with `all-features` (configured in `rust/Cargo.toml`).
 
 ## Python (`iv-engine` on PyPI)
 
-Wheels are produced with [maturin](https://www.maturin.rs/):
+The installable package is defined by the **workspace-root** [`pyproject.toml`](../pyproject.toml)
+so `rust/` and `python/` are both included in the source distribution.
+
+### Install from a git clone
 
 ```bash
-cd python
+# needs rustc / cargo (rustup)
+pip install .
+pip install '.[pandas]'
+pip install -e '.[dev]'
+```
+
+### Build wheels locally
+
+```bash
 python3 -m venv .venv && source .venv/bin/activate
-pip install maturin twine numpy
+pip install -U pip maturin twine
 maturin build --release
-# artifacts under python/target/wheels/ (or ../target/wheels depending on config)
+# wheels under target/wheels/
 twine upload target/wheels/*
 ```
 
-For a source distribution that builds on the target machine:
+Source distribution:
 
 ```bash
 maturin sdist
@@ -47,10 +58,10 @@ CI can publish on tagged releases using `PyO3/maturin-action` and a PyPI token.
 
 ```text
 pip install iv-engine           # NumPy required
-pip install 'iv-engine[pandas]' # + Pandas helpers
+pip install 'iv-engine[pandas]' # + Pandas Series support
 ```
 
 ## Versioning
 
-Keep workspace `version` and `python/pyproject.toml` `version` in sync
+Keep workspace `version` and both `pyproject.toml` `version` fields in sync
 (currently `0.1.0`). Record changes in [`CHANGELOG.md`](../CHANGELOG.md).

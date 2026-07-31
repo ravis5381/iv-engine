@@ -35,12 +35,26 @@ Every pricing / IV / Greek call uses the same conventions. Apply them to every e
 
 ## Install
 
-### Editable (from this repository)
+### From this repository (recommended)
+
+Requires [Rust](https://rustup.rs/) on the machine that builds the wheel.
+
+```bash
+# repository root
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -U pip
+pip install .                 # NumPy
+pip install '.[pandas]'       # + Series helpers
+pip install -e '.[dev]'       # editable + pytest/pandas
+```
+
+### Editable (maturin develop)
 
 ```bash
 cd python
 python3 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install maturin pytest numpy pandas
 maturin develop
 pytest
@@ -50,7 +64,7 @@ pytest
 
 ```bash
 pip install iv-engine              # NumPy required
-pip install 'iv-engine[pandas]'    # Series support for batch APIs
+pip install 'iv-engine[pandas]'    # + Series support for batch APIs
 ```
 
 ---

@@ -37,8 +37,9 @@ logic is implemented in Python.
 ```text
 iv-engine/
 ├── Cargo.toml              # workspace (rust + python)
+├── pyproject.toml          # pip / maturin (install from repo root)
 ├── rust/                   # numerical core + examples
-├── python/                 # PyO3 / maturin bindings
+├── python/                 # PyO3 bindings + package sources
 ├── examples/               # cross-language demos
 ├── docs/                   # API + publishing notes
 ├── CHANGELOG.md
@@ -62,13 +63,23 @@ let vol = implied_volatility(price, 100.0, 100.0, 1.0, true)?;
 
 ## Quick start (Python)
 
+Requires a Rust toolchain ([rustup](https://rustup.rs/)) for the first build.
+
 ```bash
-cd python
+# from the repository root
 python3 -m venv .venv && source .venv/bin/activate
-pip install maturin pytest numpy pandas
-maturin develop
-pytest
-python ../examples/python_roundtrip.py
+pip install -U pip
+pip install '.[pandas]'          # or: pip install -e '.[dev]'
+python -c "import iv_engine as iv; print(iv.black_price(100,100,1,0.2,True))"
+pytest                            # from root, or: cd python && pytest
+```
+
+Editable / develop install (rebuilds the extension on change):
+
+```bash
+pip install -e '.[dev]'
+# equivalent:
+#   cd python && pip install maturin && maturin develop --extras=dev
 ```
 
 ```python

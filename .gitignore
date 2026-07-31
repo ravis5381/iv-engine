@@ -5,6 +5,7 @@ Cargo.lock
 
 # Python / maturin
 python/**/__pycache__/
+examples/**/__pycache__/
 python/**/*.so
 python/**/*.pyd
 python/.venv/
@@ -14,6 +15,7 @@ python/.pytest_cache/
 .venv/
 dist/
 *.egg-info/
+.ipynb_checkpoints/
 
 # IDE / OS
 .idea/

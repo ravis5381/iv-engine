@@ -57,13 +57,13 @@ jobs:
           python-version: "3.12"
 
       - name: Install and test
-        working-directory: python
         run: |
           python -m venv .venv
           . .venv/bin/activate
-          pip install -U pip maturin pytest numpy pandas
-          maturin develop
+          pip install -U pip
+          pip install '.[dev,pandas]'
           pytest -m "not profile"
+          python -c "import iv_engine as iv; assert iv.black_price(100,100,1,0.2,True) > 0"
 
       - name: Clippy (bindings)
         run: cargo clippy -p iv-engine-py -- -D warnings
