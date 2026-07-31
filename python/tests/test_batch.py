@@ -71,10 +71,16 @@ def test_greeks_series():
     vega = vegas(forward, strike, maturity, volatility)
     gamma = gammas(forward, strike, maturity, volatility, name="g")
     delta = deltas(forward, strike, maturity, volatility, name="d")
+    vomma = iv.vommas(forward, strike, maturity, volatility)
+    vanna = iv.vannas(forward, strike, maturity, volatility)
     assert isinstance(vega, pd.Series)
+    assert isinstance(vomma, pd.Series)
+    assert isinstance(vanna, pd.Series)
     assert (gamma > 0).all()
     assert (vega > 0).all()
     assert delta.name == "d"
+    assert vomma.name == "vomma"
+    assert vanna.name == "vanna"
 
 
 def test_numpy_still_returns_ndarray():

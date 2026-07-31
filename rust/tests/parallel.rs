@@ -3,8 +3,8 @@
 use iv_engine::{
     black_price_slice, black_price_slice_par, black_scholes_price_slice,
     black_scholes_price_slice_par, delta_slice, delta_slice_par, gamma_slice, gamma_slice_par,
-    implied_volatility_slice, implied_volatility_slice_par, rayon_enabled, vega_slice,
-    vega_slice_par, MIN_PARALLEL,
+    implied_volatility_slice, implied_volatility_slice_par, rayon_enabled, vanna_slice,
+    vanna_slice_par, vega_slice, vega_slice_par, vomma_slice, vomma_slice_par, MIN_PARALLEL,
 };
 
 fn assert_slices_bit_equal(a: &[f64], b: &[f64]) {
@@ -59,15 +59,25 @@ fn large_batch_matches_serial() {
     let mut g_p = vec![0.0; n];
     let mut v_s = vec![0.0; n];
     let mut v_p = vec![0.0; n];
+    let mut vo_s = vec![0.0; n];
+    let mut vo_p = vec![0.0; n];
+    let mut va_s = vec![0.0; n];
+    let mut va_p = vec![0.0; n];
     delta_slice(&forwards, &strikes, &mats, &vols, true, &mut d_s).unwrap();
     delta_slice_par(&forwards, &strikes, &mats, &vols, true, &mut d_p).unwrap();
     gamma_slice(&forwards, &strikes, &mats, &vols, &mut g_s).unwrap();
     gamma_slice_par(&forwards, &strikes, &mats, &vols, &mut g_p).unwrap();
     vega_slice(&forwards, &strikes, &mats, &vols, &mut v_s).unwrap();
     vega_slice_par(&forwards, &strikes, &mats, &vols, &mut v_p).unwrap();
+    vomma_slice(&forwards, &strikes, &mats, &vols, &mut vo_s).unwrap();
+    vomma_slice_par(&forwards, &strikes, &mats, &vols, &mut vo_p).unwrap();
+    vanna_slice(&forwards, &strikes, &mats, &vols, &mut va_s).unwrap();
+    vanna_slice_par(&forwards, &strikes, &mats, &vols, &mut va_p).unwrap();
     assert_slices_bit_equal(&d_s, &d_p);
     assert_slices_bit_equal(&g_s, &g_p);
     assert_slices_bit_equal(&v_s, &v_p);
+    assert_slices_bit_equal(&vo_s, &vo_p);
+    assert_slices_bit_equal(&va_s, &va_p);
 }
 
 #[test]

@@ -43,7 +43,9 @@ from iv_engine.batch import (
     deltas,
     gammas,
     implied_volatilities,
+    vannas,
     vegas,
+    vommas,
 )
 
 __all__ = [
@@ -79,7 +81,9 @@ __all__ = [
     "normalised_implied_volatility",
     "theta",
     "vanna",
+    "vannas",
     "vega",
     "vegas",
     "vomma",
+    "vommas",
 ]

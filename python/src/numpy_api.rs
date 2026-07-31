@@ -295,6 +295,64 @@ fn vegas<'py>(
     })
 }
 
+/// Batch Black-76 vommas (volga).
+#[pyfunction]
+#[pyo3(signature = (forwards, strikes, maturities, vols, parallel=false))]
+fn vommas<'py>(
+    py: Python<'py>,
+    forwards: &Bound<'py, PyAny>,
+    strikes: &Bound<'py, PyAny>,
+    maturities: &Bound<'py, PyAny>,
+    vols: &Bound<'py, PyAny>,
+    parallel: bool,
+) -> PyResult<Bound<'py, PyArray1<f64>>> {
+    let f = F64In::from_obj(forwards)?;
+    let k = F64In::from_obj(strikes)?;
+    let t = F64In::from_obj(maturities)?;
+    let v = F64In::from_obj(vols)?;
+    let fs = f.as_slice();
+    let ks = k.as_slice();
+    let ts = t.as_slice();
+    let vs = v.as_slice();
+    let n = iv_engine::batch_len(&[fs.len(), ks.len(), ts.len(), vs.len()]).map_err(map_err)?;
+    write_out(py, n, |out| {
+        if parallel {
+            iv_engine::vomma_slice_par(fs, ks, ts, vs, out)
+        } else {
+            iv_engine::vomma_slice(fs, ks, ts, vs, out)
+        }
+    })
+}
+
+/// Batch Black-76 vannas.
+#[pyfunction]
+#[pyo3(signature = (forwards, strikes, maturities, vols, parallel=false))]
+fn vannas<'py>(
+    py: Python<'py>,
+    forwards: &Bound<'py, PyAny>,
+    strikes: &Bound<'py, PyAny>,
+    maturities: &Bound<'py, PyAny>,
+    vols: &Bound<'py, PyAny>,
+    parallel: bool,
+) -> PyResult<Bound<'py, PyArray1<f64>>> {
+    let f = F64In::from_obj(forwards)?;
+    let k = F64In::from_obj(strikes)?;
+    let t = F64In::from_obj(maturities)?;
+    let v = F64In::from_obj(vols)?;
+    let fs = f.as_slice();
+    let ks = k.as_slice();
+    let ts = t.as_slice();
+    let vs = v.as_slice();
+    let n = iv_engine::batch_len(&[fs.len(), ks.len(), ts.len(), vs.len()]).map_err(map_err)?;
+    write_out(py, n, |out| {
+        if parallel {
+            iv_engine::vanna_slice_par(fs, ks, ts, vs, out)
+        } else {
+            iv_engine::vanna_slice(fs, ks, ts, vs, out)
+        }
+    })
+}
+
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(norm_pdfs, m)?)?;
     m.add_function(wrap_pyfunction!(norm_cdfs, m)?)?;
@@ -306,5 +364,7 @@ pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(deltas, m)?)?;
     m.add_function(wrap_pyfunction!(gammas, m)?)?;
     m.add_function(wrap_pyfunction!(vegas, m)?)?;
+    m.add_function(wrap_pyfunction!(vommas, m)?)?;
+    m.add_function(wrap_pyfunction!(vannas, m)?)?;
     Ok(())
 }

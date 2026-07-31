@@ -34,7 +34,7 @@ mod rayon_impl {
     use crate::black::black_price;
     use crate::black_scholes::black_scholes_price;
     use crate::errors::IVError;
-    use crate::greeks::{delta, gamma, vega};
+    use crate::greeks::{delta, gamma, vanna, vega, vomma};
     use crate::rational::{implied_volatility, normalised_implied_volatility};
     use crate::vector::{
         at, black_price_slice as serial_black_price_slice,
@@ -42,7 +42,8 @@ mod rayon_impl {
         delta_slice as serial_delta_slice, gamma_slice as serial_gamma_slice,
         implied_volatility_slice as serial_implied_volatility_slice,
         normalised_implied_volatility_slice as serial_normalised_implied_volatility_slice,
-        require_out_len, resolve_batch_len, vega_slice as serial_vega_slice, write_or_nan,
+        require_out_len, resolve_batch_len, vanna_slice as serial_vanna_slice,
+        vega_slice as serial_vega_slice, vomma_slice as serial_vomma_slice, write_or_nan,
     };
     use rayon::prelude::*;
 
@@ -285,6 +286,68 @@ mod rayon_impl {
         });
         Ok(())
     }
+
+    /// Parallel Black-76 vommas (see module docs).
+    ///
+    /// # Errors
+    ///
+    /// [`IVError::InvalidInput`] on length / broadcast mismatch.
+    pub fn vomma_slice_par(
+        forwards: &[f64],
+        strikes: &[f64],
+        maturities: &[f64],
+        vols: &[f64],
+        out: &mut [f64],
+    ) -> Result<(), IVError> {
+        let n = resolve_batch_len(&[forwards.len(), strikes.len(), maturities.len(), vols.len()])?;
+        require_out_len(out.len(), n)?;
+        if n < MIN_PARALLEL {
+            return serial_vomma_slice(forwards, strikes, maturities, vols, out);
+        }
+        out.par_iter_mut().enumerate().for_each(|(i, slot)| {
+            write_or_nan(
+                slot,
+                vomma(
+                    at(forwards, i),
+                    at(strikes, i),
+                    at(maturities, i),
+                    at(vols, i),
+                ),
+            );
+        });
+        Ok(())
+    }
+
+    /// Parallel Black-76 vannas (see module docs).
+    ///
+    /// # Errors
+    ///
+    /// [`IVError::InvalidInput`] on length / broadcast mismatch.
+    pub fn vanna_slice_par(
+        forwards: &[f64],
+        strikes: &[f64],
+        maturities: &[f64],
+        vols: &[f64],
+        out: &mut [f64],
+    ) -> Result<(), IVError> {
+        let n = resolve_batch_len(&[forwards.len(), strikes.len(), maturities.len(), vols.len()])?;
+        require_out_len(out.len(), n)?;
+        if n < MIN_PARALLEL {
+            return serial_vanna_slice(forwards, strikes, maturities, vols, out);
+        }
+        out.par_iter_mut().enumerate().for_each(|(i, slot)| {
+            write_or_nan(
+                slot,
+                vanna(
+                    at(forwards, i),
+                    at(strikes, i),
+                    at(maturities, i),
+                    at(vols, i),
+                ),
+            );
+        });
+        Ok(())
+    }
 }
 
 #[cfg(not(feature = "rayon"))]
@@ -294,18 +357,21 @@ mod serial_fallback {
         black_scholes_price_slice as black_scholes_price_slice_par, delta_slice as delta_slice_par,
         gamma_slice as gamma_slice_par, implied_volatility_slice as implied_volatility_slice_par,
         normalised_implied_volatility_slice as normalised_implied_volatility_slice_par,
-        vega_slice as vega_slice_par,
+        vanna_slice as vanna_slice_par, vega_slice as vega_slice_par,
+        vomma_slice as vomma_slice_par,
     };
 }
 
 #[cfg(feature = "rayon")]
 pub use rayon_impl::{
     black_price_slice_par, black_scholes_price_slice_par, delta_slice_par, gamma_slice_par,
-    implied_volatility_slice_par, normalised_implied_volatility_slice_par, vega_slice_par,
+    implied_volatility_slice_par, normalised_implied_volatility_slice_par, vanna_slice_par,
+    vega_slice_par, vomma_slice_par,
 };
 
 #[cfg(not(feature = "rayon"))]
 pub use serial_fallback::{
     black_price_slice_par, black_scholes_price_slice_par, delta_slice_par, gamma_slice_par,
-    implied_volatility_slice_par, normalised_implied_volatility_slice_par, vega_slice_par,
+    implied_volatility_slice_par, normalised_implied_volatility_slice_par, vanna_slice_par,
+    vega_slice_par, vomma_slice_par,
 };

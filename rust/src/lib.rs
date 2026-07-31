@@ -68,11 +68,12 @@ pub use normal::{norm_cdf, norm_cdf_c, norm_pdf};
 pub use parallel::{
     black_price_slice_par, black_scholes_price_slice_par, delta_slice_par, gamma_slice_par,
     implied_volatility_slice_par, normalised_implied_volatility_slice_par, rayon_enabled,
-    vega_slice_par, MIN_PARALLEL,
+    vanna_slice_par, vega_slice_par, vomma_slice_par, MIN_PARALLEL,
 };
 pub use rational::{implied_volatility, normalised_implied_volatility};
 pub use simd::{norm_cdf_c_slice, norm_cdf_slice, norm_pdf_slice, simd_enabled, SIMD_LANES};
 pub use vector::{
     batch_len, black_price_slice, black_scholes_price_slice, delta_slice, gamma_slice,
-    implied_volatility_slice, normalised_implied_volatility_slice, vega_slice,
+    implied_volatility_slice, normalised_implied_volatility_slice, vanna_slice, vega_slice,
+    vomma_slice,
 };

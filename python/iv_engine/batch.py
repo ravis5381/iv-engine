@@ -28,7 +28,9 @@ from iv_engine._core import (
     deltas as _deltas,
     gammas as _gammas,
     implied_volatilities as _implied_volatilities,
+    vannas as _vannas,
     vegas as _vegas,
+    vommas as _vommas,
 )
 
 if TYPE_CHECKING:
@@ -42,7 +44,9 @@ __all__ = [
     "deltas",
     "gammas",
     "implied_volatilities",
+    "vannas",
     "vegas",
+    "vommas",
 ]
 
 
@@ -259,6 +263,50 @@ def vegas(
         ("volatility", volatility),
     )
     out = _vegas(f, k, t, v, parallel)
+    if as_series:
+        return _series_from(out, indexes, name=name)
+    return out
+
+
+def vommas(
+    forward: FloatOrArray,
+    strike: FloatOrArray,
+    maturity: FloatOrArray,
+    volatility: FloatOrArray,
+    parallel: bool = True,
+    *,
+    name: str = "vomma",
+) -> Any:
+    """Black-76 vommas / volga (ndarray or Series). Parallel by default."""
+    (f, k, t, v), indexes, as_series = _pack(
+        ("forward", forward),
+        ("strike", strike),
+        ("maturity", maturity),
+        ("volatility", volatility),
+    )
+    out = _vommas(f, k, t, v, parallel)
+    if as_series:
+        return _series_from(out, indexes, name=name)
+    return out
+
+
+def vannas(
+    forward: FloatOrArray,
+    strike: FloatOrArray,
+    maturity: FloatOrArray,
+    volatility: FloatOrArray,
+    parallel: bool = True,
+    *,
+    name: str = "vanna",
+) -> Any:
+    """Black-76 vannas (ndarray or Series). Parallel by default."""
+    (f, k, t, v), indexes, as_series = _pack(
+        ("forward", forward),
+        ("strike", strike),
+        ("maturity", maturity),
+        ("volatility", volatility),
+    )
+    out = _vannas(f, k, t, v, parallel)
     if as_series:
         return _series_from(out, indexes, name=name)
     return out

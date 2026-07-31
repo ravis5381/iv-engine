@@ -5,7 +5,8 @@
 use iv_engine::{
     black_price, black_price_slice, black_scholes_price, black_scholes_price_slice, delta,
     delta_slice, gamma, gamma_slice, implied_volatility, implied_volatility_slice,
-    normalised_implied_volatility, normalised_implied_volatility_slice, vega, vega_slice,
+    normalised_implied_volatility, normalised_implied_volatility_slice, vanna, vanna_slice, vega,
+    vega_slice, vomma, vomma_slice,
 };
 
 #[test]
@@ -106,13 +107,19 @@ fn normalised_and_greeks_slices_match_scalar() {
     let mut d = [0.0; 2];
     let mut g = [0.0; 2];
     let mut vg = [0.0; 2];
+    let mut vo = [0.0; 2];
+    let mut va = [0.0; 2];
     delta_slice(&f, &k, &t, &v, true, &mut d).unwrap();
     gamma_slice(&f, &k, &t, &v, &mut g).unwrap();
     vega_slice(&f, &k, &t, &v, &mut vg).unwrap();
+    vomma_slice(&f, &k, &t, &v, &mut vo).unwrap();
+    vanna_slice(&f, &k, &t, &v, &mut va).unwrap();
     for i in 0..2 {
         assert!((d[i] - delta(f[i], k[i], t[i], v[i], true).unwrap()).abs() < 1e-15);
         assert!((g[i] - gamma(f[i], k[i], t[i], v[i]).unwrap()).abs() < 1e-15);
         assert!((vg[i] - vega(f[i], k[i], t[i], v[i]).unwrap()).abs() < 1e-15);
+        assert!((vo[i] - vomma(f[i], k[i], t[i], v[i]).unwrap()).abs() < 1e-15);
+        assert!((va[i] - vanna(f[i], k[i], t[i], v[i]).unwrap()).abs() < 1e-15);
     }
 }
 

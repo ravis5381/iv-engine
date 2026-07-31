@@ -353,7 +353,7 @@ px = iv.black_scholes_prices(
 )
 ```
 
-### `deltas` / `gammas` / `vegas`
+### `deltas` / `gammas` / `vegas` / `vommas` / `vannas`
 
 **Units:** `maturity` years; `volatility` absolute; `vega` per 1.0 vol point.
 
@@ -365,6 +365,8 @@ K = np.array([90.0, 100.0, 110.0])
 d = iv.deltas(100.0, K, 1.0, 0.2, is_call=True)
 g = iv.gammas(100.0, K, 1.0, 0.2)
 v = iv.vegas(100.0, K, 1.0, 0.2)
+vo = iv.vommas(100.0, K, 1.0, 0.2)
+va = iv.vannas(100.0, K, 1.0, 0.2)
 ```
 
 ### `norm_pdfs` / `norm_cdfs` / `normalised_implied_volatilities`
@@ -418,7 +420,7 @@ serial = iv.black_prices(100.0, K, 1.0, 0.2, True, parallel=False)
 assert np.array_equal(default, serial)
 ```
 
-The same default applies to `implied_volatilities`, `black_scholes_prices`, `deltas`, `gammas`, and `vegas`.
+The same default applies to `implied_volatilities`, `black_scholes_prices`, `deltas`, `gammas`, `vegas`, `vommas`, and `vannas`.
 
 ---
 
@@ -495,7 +497,7 @@ book["bs_price"] = iv.black_scholes_prices(
 )
 ```
 
-### `deltas` / `gammas` / `vegas`
+### `deltas` / `gammas` / `vegas` / `vommas` / `vannas`
 
 **Units:** `maturity` years; `volatility` absolute; `vega` per 1.0 vol point.
 
@@ -513,6 +515,8 @@ df = pd.DataFrame({
 df["delta"] = iv.deltas(df["forward"], df["strike"], df["maturity"], df["volatility"], is_call=True)
 df["gamma"] = iv.gammas(df["forward"], df["strike"], df["maturity"], df["volatility"])
 df["vega"] = iv.vegas(df["forward"], df["strike"], df["maturity"], df["volatility"])
+df["vomma"] = iv.vommas(df["forward"], df["strike"], df["maturity"], df["volatility"])
+df["vanna"] = iv.vannas(df["forward"], df["strike"], df["maturity"], df["volatility"])
 print(df)
 ```
 
@@ -604,7 +608,7 @@ except iv.IVError as exc:
 |----------|------|----------|
 | `black_prices` / `black_scholes_prices` | Batch prices | `name="price"` |
 | `implied_volatilities` | Batch IV | `name="implied_vol"` |
-| `deltas` / `gammas` / `vegas` | Batch Greeks | `delta` / `gamma` / `vega` |
+| `deltas` / `gammas` / `vegas` / `vommas` / `vannas` | Batch Greeks | `delta` / `gamma` / `vega` / `vomma` / `vanna` |
 | `norm_pdfs` / `norm_cdfs` / `norm_cdf_cs` | Batch Normal | (ndarray only) |
 | `normalised_implied_volatilities` | Batch normalised IV | (ndarray only) |
 

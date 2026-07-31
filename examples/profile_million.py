@@ -87,6 +87,8 @@ def run_profile(n: int = N) -> list[BenchRow]:
         ("deltas", lambda p: iv.deltas(f, k, t, v, True, parallel=p)),
         ("gammas", lambda p: iv.gammas(f, k, t, v, parallel=p)),
         ("vegas", lambda p: iv.vegas(f, k, t, v, parallel=p)),
+        ("vommas", lambda p: iv.vommas(f, k, t, v, parallel=p)),
+        ("vannas", lambda p: iv.vannas(f, k, t, v, parallel=p)),
         (
             "black_scholes_prices",
             lambda p: iv.black_scholes_prices(f, k, t, 0.05, 0.01, v, True, parallel=p),

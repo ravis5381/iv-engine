@@ -66,9 +66,14 @@ def test_greeks_batch():
     d = iv.deltas(100.0, strikes, 1.0, 0.2, True)
     g = iv.gammas(100.0, strikes, 1.0, 0.2)
     v = iv.vegas(100.0, strikes, 1.0, 0.2)
-    assert d.shape == g.shape == v.shape == (3,)
+    vo = iv.vommas(100.0, strikes, 1.0, 0.2)
+    va = iv.vannas(100.0, strikes, 1.0, 0.2)
+    assert d.shape == g.shape == v.shape == vo.shape == va.shape == (3,)
     assert np.all(g > 0.0)
     assert np.all(v > 0.0)
+    for i, k in enumerate(strikes):
+        assert abs(vo[i] - iv.vomma(100.0, float(k), 1.0, 0.2)) < 1e-14
+        assert abs(va[i] - iv.vanna(100.0, float(k), 1.0, 0.2)) < 1e-14
 
 
 def test_black_scholes_prices_batch():

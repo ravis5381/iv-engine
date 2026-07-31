@@ -32,7 +32,7 @@
 use crate::black::black_price;
 use crate::black_scholes::black_scholes_price;
 use crate::errors::IVError;
-use crate::greeks::{delta, gamma, vega};
+use crate::greeks::{delta, gamma, vanna, vega, vomma};
 use crate::rational::{implied_volatility, normalised_implied_volatility};
 
 /// Resolve the common batch length from input slice lengths.
@@ -316,6 +316,62 @@ pub fn vega_slice(
         write_or_nan(
             slot,
             vega(
+                at(forwards, i),
+                at(strikes, i),
+                at(maturities, i),
+                at(vols, i),
+            ),
+        );
+    }
+    Ok(())
+}
+
+/// Batch Black-76 vommas (volga) `∂²V/∂σ²`.
+///
+/// # Errors
+///
+/// [`IVError::InvalidInput`] on length / broadcast mismatch.
+pub fn vomma_slice(
+    forwards: &[f64],
+    strikes: &[f64],
+    maturities: &[f64],
+    vols: &[f64],
+    out: &mut [f64],
+) -> Result<(), IVError> {
+    let n = resolve_batch_len(&[forwards.len(), strikes.len(), maturities.len(), vols.len()])?;
+    require_out_len(out.len(), n)?;
+    for (i, slot) in out.iter_mut().enumerate() {
+        write_or_nan(
+            slot,
+            vomma(
+                at(forwards, i),
+                at(strikes, i),
+                at(maturities, i),
+                at(vols, i),
+            ),
+        );
+    }
+    Ok(())
+}
+
+/// Batch Black-76 vannas `∂²V/∂F∂σ`.
+///
+/// # Errors
+///
+/// [`IVError::InvalidInput`] on length / broadcast mismatch.
+pub fn vanna_slice(
+    forwards: &[f64],
+    strikes: &[f64],
+    maturities: &[f64],
+    vols: &[f64],
+    out: &mut [f64],
+) -> Result<(), IVError> {
+    let n = resolve_batch_len(&[forwards.len(), strikes.len(), maturities.len(), vols.len()])?;
+    require_out_len(out.len(), n)?;
+    for (i, slot) in out.iter_mut().enumerate() {
+        write_or_nan(
+            slot,
+            vanna(
                 at(forwards, i),
                 at(strikes, i),
                 at(maturities, i),
