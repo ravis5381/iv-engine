@@ -9,19 +9,19 @@ logic is implemented in Python.
 
 ## Status
 
-| Phase | Scope                                      | Status      |
-|-------|--------------------------------------------|-------------|
-| 1     | Workspace, errors, constants, module shells | **Current** |
-| 2     | Normal PDF / CDF                           | Pending     |
-| 3     | Black-76 pricing                           | Pending     |
-| 4     | Greeks                                     | Pending     |
-| 5     | Let's Be Rational IV                       | Pending     |
-| 6     | Reference validation                       | Pending     |
-| 7     | Vector API                                 | Pending     |
-| 8     | Rayon parallelism                          | Pending     |
-| 9     | Optional SIMD                              | Pending     |
-| 10–12 | Python / NumPy / Pandas                    | Pending     |
-| 13    | Docs, examples, CI, publishing             | Pending     |
+| Phase | Scope                                      | Status        |
+|-------|--------------------------------------------|---------------|
+| 1     | Workspace, errors, constants, module shells | Done          |
+| 2     | Normal PDF / CDF                           | **Current**   |
+| 3     | Black-76 pricing                           | Pending       |
+| 4     | Greeks                                     | Pending       |
+| 5     | Let's Be Rational IV                       | Pending       |
+| 6     | Reference validation                       | Pending       |
+| 7     | Vector API                                 | Pending       |
+| 8     | Rayon parallelism                          | Pending       |
+| 9     | Optional SIMD                              | Pending       |
+| 10–12 | Python / NumPy / Pandas                    | Pending       |
+| 13    | Docs, examples, CI, publishing             | Pending       |
 
 ## Goals
 
@@ -46,8 +46,9 @@ iv-engine/
 ```bash
 cd iv-engine
 cargo test -p iv-engine
-cargo clippy -p iv-engine -- -D warnings
+cargo clippy -p iv-engine --all-targets -- -D warnings
 cargo fmt --check
+cargo bench -p iv-engine --bench normal
 ```
 
 ## References

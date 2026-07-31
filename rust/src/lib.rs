@@ -15,7 +15,7 @@
 //! |--------------------------|-------|----------|
 //! | [`errors::IVError`]      | 1     | Ready    |
 //! | [`constants`]            | 1     | Ready    |
-//! | Normal PDF / CDF         | 2     | Planned  |
+//! | [`normal`] PDF / CDF     | 2     | Ready    |
 //! | Black-76 price           | 3     | Planned  |
 //! | Black–Scholes price      | 3     | Planned  |
 //! | Greeks                   | 4     | Planned  |
@@ -51,3 +51,4 @@ pub use constants::{
     SQRT_PI_OVER_TWO, SQRT_TWO, SQRT_TWO_PI, TWO_PI,
 };
 pub use errors::IVError;
+pub use normal::{norm_cdf, norm_cdf_c, norm_pdf};

@@ -20,12 +20,18 @@ path = "src/lib.rs"
 crate-type = ["rlib"]
 
 [dependencies]
-# Intentionally empty in Phase 1.
+# Portable erf/erfc — std `f64::erfc` remains unstable on current stable Rust.
+libm = "0.2"
 # Later phases may add: rayon (parallel), wide/packed_simd (SIMD).
 # Python bindings live in a separate crate and must not pollute this core.
 
 [dev-dependencies]
-# Criterion, proptest, and approx arrive in later phases when pricing/IV exist.
+criterion = { version = "0.5", default-features = false, features = ["cargo_bench_support"] }
+# proptest / approx arrive in later phases when pricing/IV exist.
+
+[[bench]]
+name = "normal"
+harness = false
 
 [lints.rust]
 unsafe_code = "warn"
@@ -49,7 +55,8 @@ similar_names = { level = "allow", priority = 1 }
 unreadable_literal = { level = "allow", priority = 1 }
 cast_possible_truncation = { level = "allow", priority = 1 }
 cast_sign_loss = { level = "allow", priority = 1 }
-cast_precision_loss = { level = "allow", priority = 1 }
+inconsistent_digit_grouping = { level = "allow", priority = 1 }
+while_float = { level = "allow", priority = 1 }
 
 [package.metadata.docs.rs]
 all-features = true

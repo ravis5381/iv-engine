@@ -90,9 +90,9 @@ fn rejects_non_finite_via_helper() {
 
 #[test]
 fn modules_are_linked_with_phase_markers() {
-    // Touch each public module path so missing files fail to compile here
-    // rather than only when a later phase imports them.
-    assert_eq!(iv_engine::normal::PHASE, 2);
+    // Touch each still-pending public module path so missing files fail here.
+    // `normal` is implemented (Phase 2) — exercise it via the real API.
+    assert!(iv_engine::norm_pdf(0.0) > 0.0);
     assert_eq!(iv_engine::black::PHASE, 3);
     assert_eq!(iv_engine::black_scholes::PHASE, 3);
     assert_eq!(iv_engine::greeks::PHASE, 4);
