@@ -1,0 +1,56 @@
+[package]
+name = "iv-engine"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "High-performance implied volatility and Black/Black-Scholes pricing via Let's Be Rational"
+documentation = "https://docs.rs/iv-engine"
+
+[lib]
+name = "iv_engine"
+path = "src/lib.rs"
+# `cdylib` is reserved for the Python extension crate (Phase 10).
+crate-type = ["rlib"]
+
+[dependencies]
+# Intentionally empty in Phase 1.
+# Later phases may add: rayon (parallel), wide/packed_simd (SIMD).
+# Python bindings live in a separate crate and must not pollute this core.
+
+[dev-dependencies]
+# Criterion, proptest, and approx arrive in later phases when pricing/IV exist.
+
+[lints.rust]
+unsafe_code = "warn"
+missing_docs = "warn"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+module_name_repetitions = { level = "allow", priority = 1 }
+must_use_candidate = { level = "allow", priority = 1 }
+float_cmp = { level = "allow", priority = 1 }
+doc_markdown = { level = "allow", priority = 1 }
+missing_errors_doc = { level = "allow", priority = 1 }
+missing_panics_doc = { level = "allow", priority = 1 }
+suboptimal_flops = { level = "allow", priority = 1 }
+assertions_on_constants = { level = "allow", priority = 1 }
+single_char_pattern = { level = "allow", priority = 1 }
+many_single_char_names = { level = "allow", priority = 1 }
+similar_names = { level = "allow", priority = 1 }
+unreadable_literal = { level = "allow", priority = 1 }
+cast_possible_truncation = { level = "allow", priority = 1 }
+cast_sign_loss = { level = "allow", priority = 1 }
+cast_precision_loss = { level = "allow", priority = 1 }
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

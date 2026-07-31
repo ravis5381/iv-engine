@@ -1,0 +1,19 @@
+# Placeholder — replaced by a full maturin/PyO3 configuration in Phase 10.
+[project]
+name = "iv-engine"
+version = "0.1.0"
+description = "Implied volatility and Black/Black-Scholes via Let's Be Rational"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "iv-engine contributors" }]
+keywords = ["quant", "finance", "options", "volatility", "black-scholes"]
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+# Configured properly when the extension crate is added in Phase 10.
+python-source = "."
+module-name = "iv_engine"

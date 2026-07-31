@@ -1,0 +1,47 @@
+# Workspace root for the iv-engine project.
+#
+# The Rust crate (`rust/`) is the numerical source of truth.
+# The Python package (`python/`) will be added as a maturin member
+# in Phase 10 and will only wrap the Rust API — no pricing logic in Python.
+[workspace]
+resolver = "2"
+members = ["rust"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+license = "MIT"
+authors = ["iv-engine contributors"]
+repository = "https://github.com/example/iv-engine"
+homepage = "https://github.com/example/iv-engine"
+readme = "README.md"
+keywords = ["quant", "finance", "options", "volatility", "black-scholes"]
+categories = ["finance", "mathematics", "science"]
+
+[workspace.lints.rust]
+unsafe_code = "warn"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+# Baseline
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+
+# Numerical / docs / style allowances (priority > group so they win).
+module_name_repetitions = { level = "allow", priority = 1 }
+must_use_candidate = { level = "allow", priority = 1 }
+float_cmp = { level = "allow", priority = 1 }
+doc_markdown = { level = "allow", priority = 1 }
+missing_errors_doc = { level = "allow", priority = 1 }
+missing_panics_doc = { level = "allow", priority = 1 }
+suboptimal_flops = { level = "allow", priority = 1 }
+assertions_on_constants = { level = "allow", priority = 1 }
+single_char_pattern = { level = "allow", priority = 1 }
+many_single_char_names = { level = "allow", priority = 1 }
+similar_names = { level = "allow", priority = 1 }
+unreadable_literal = { level = "allow", priority = 1 }
+cast_possible_truncation = { level = "allow", priority = 1 }
+cast_sign_loss = { level = "allow", priority = 1 }
+cast_precision_loss = { level = "allow", priority = 1 }

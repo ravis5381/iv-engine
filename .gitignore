@@ -1,0 +1,30 @@
+# Rust
+/target/
+**/target/
+Cargo.lock
+
+# Python / maturin
+python/**/__pycache__/
+python/**/*.so
+python/**/*.pyd
+python/.venv/
+python/dist/
+python/*.egg-info/
+python/.pytest_cache/
+.venv/
+dist/
+*.egg-info/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Coverage / profiling
+*.profraw
+lcov.info
+tarpaulin-report.html
+
+# Benchmarks
+criterion/
