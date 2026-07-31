@@ -45,8 +45,7 @@ maturin develop
 | Layer | Names |
 |-------|--------|
 | Scalar | `black_price`, `implied_volatility`, Greeks, … |
-| NumPy | `black_prices`, `implied_volatilities`, `norm_pdfs`, … (`parallel=True` optional) |
-| Pandas | `black_prices_frame`, `implied_volatilities_frame`, … (extra `[pandas]`) |
+| NumPy / Pandas | `black_prices`, `deltas`, `vegas`, … — ndarray or Series; **parallel by default** (`[pandas]` for Series) |
 
 Errors raise `iv_engine.IVError` with `args == (code, message)`.
 

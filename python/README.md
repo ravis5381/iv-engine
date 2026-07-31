@@ -8,8 +8,7 @@ This package only wraps those kernels — it does not reimplement any math.
 | Layer | What you get |
 |-------|----------------|
 | Scalar | Single-value floats |
-| NumPy | 1-D `float64` arrays (scalar broadcast supported) |
-| Pandas | DataFrame helpers (optional extra) |
+| Batch | 1-D `float64` arrays or pandas `Series` (parallel by default) |
 
 ---
 
@@ -51,7 +50,7 @@ pytest
 
 ```bash
 pip install iv-engine              # NumPy required
-pip install 'iv-engine[pandas]'    # + DataFrame helpers
+pip install 'iv-engine[pandas]'    # Series support for batch APIs
 ```
 
 ---
@@ -293,14 +292,18 @@ print(iv.black_scholes_vanna(S, K, T, r, q, sigma))
 
 ---
 
-## 6. NumPy batch APIs
+## 6. NumPy / pandas batch APIs
 
-Plural names (`black_prices`, `implied_volatilities`, …) accept:
+Plural names (`black_prices`, `deltas`, `vegas`, …) accept:
 
-- a **1-D contiguous `float64`** array, or
-- a Python **`float`** (treated as length-1 and broadcast)
+- a **1-D contiguous `float64`** array,
+- a pandas **`Series`**, or
+- a Python **`float`** (broadcast)
 
-All inputs must share length `1` or `n`. Output length is `n`. Units match the scalar APIs above.
+If any argument is a `Series`, the result is a `Series` with that index; otherwise an `ndarray`.
+All inputs must share length `1` or `n`. Output length is `n`.
+
+**Parallel is on by default** (`parallel=True`). Pass `parallel=False` to force serial.
 
 ### `black_prices` — strike grid
 
@@ -396,41 +399,42 @@ assert np.isfinite(px[0]) and np.isnan(px[1]) and np.isfinite(px[2])
 
 ---
 
-## 7. Parallel batches (`parallel=True`)
+## 7. Parallel batches (default on)
 
-Large arrays can use Rayon (compiled into the extension). Small batches stay serial automatically on the Rust side.
+Batch APIs use Rayon **by default**. Small inputs may still run serially inside Rust when below the parallel threshold. Results are bit-identical to `parallel=False`.
 
-### `black_prices(..., parallel=True)`
+### `black_prices` — serial vs parallel
 
-**Units:** same as serial `black_prices` — `maturity` years; `volatility` absolute.
+**Units:** same as `black_prices` — `maturity` years; `volatility` absolute.
 
 ```python
 import numpy as np
 import iv_engine as iv
 
 K = np.linspace(50.0, 150.0, 10_000)
+# parallel=True is the default
+default = iv.black_prices(100.0, K, 1.0, 0.2, True)
 serial = iv.black_prices(100.0, K, 1.0, 0.2, True, parallel=False)
-parallel = iv.black_prices(100.0, K, 1.0, 0.2, True, parallel=True)
-assert np.array_equal(serial, parallel)  # bit-identical
+assert np.array_equal(default, serial)
 ```
 
-The same flag exists on `implied_volatilities`, `black_scholes_prices`, `deltas`, `gammas`, `vegas`, and the Pandas helpers.
+The same default applies to `implied_volatilities`, `black_scholes_prices`, `deltas`, `gammas`, and `vegas`.
 
 ---
 
-## 8. Pandas DataFrame helpers
+## 8. Pandas Series (same function names)
 
 Requires pandas (`pip install 'iv-engine[pandas]'` or install pandas in your venv).
 
-Helpers **copy** the frame and add a result column. Column arguments accept a **column name** or a **scalar** (broadcast). `is_call` is one boolean for the whole frame.
+Use the same batch names (`black_prices`, `vegas`, …) with **`df["col"]`**. Parallel is on by default.
 
-### `black_prices_frame` / `implied_volatilities_frame`
+### `black_prices` / `implied_volatilities`
 
 **Units:**
-- column / scalar `maturity` — years  
+- `maturity` — years (Series or scalar)  
 - `volatility` — absolute (`0.20` = 20%)  
 - `forward` / `strike` / `price` — price units (undiscounted)  
-- `implied_vol` output — absolute σ
+- returned Series — absolute σ for IV helpers
 
 ```python
 import pandas as pd
@@ -443,31 +447,26 @@ df = pd.DataFrame({
     "volatility": 0.20,
 })
 
-priced = iv.black_prices_frame(df, is_call=True)          # adds "price"
-# Or rename / broadcast explicitly:
-priced = iv.black_prices_frame(
-    df,
-    forward="forward",
-    strike="strike",
-    maturity=1.0,
-    volatility="volatility",
+df["mid"] = iv.black_prices(
+    forward=df["forward"],
+    strike=df["strike"],
+    maturity=df["maturity"],   # or maturity=1.0
+    volatility=df["volatility"],
     is_call=True,
-    out="mid",
+    name="mid",                # optional Series.name
 )
 
-recovered = iv.implied_volatilities_frame(
-    priced,
-    price="mid",
+df["implied_vol"] = iv.implied_volatilities(
+    price=df["mid"],
     forward=100.0,
-    strike="strike",
+    strike=df["strike"],
     maturity=1.0,
     is_call=True,
-    out="implied_vol",
 )
-print(recovered[["strike", "mid", "implied_vol"]])
+print(df[["strike", "mid", "implied_vol"]])
 ```
 
-### `black_scholes_prices_frame`
+### `black_scholes_prices`
 
 **Units:** `maturity` years; `rate`/`dividend` continuous decimal; `volatility` absolute; output discounted PV.
 
@@ -484,10 +483,19 @@ book = pd.DataFrame({
     "volatility": [0.2, 0.25, 0.35],
 })
 
-out = iv.black_scholes_prices_frame(book, is_call=True, out="bs_price")
+book["bs_price"] = iv.black_scholes_prices(
+    spot=book["spot"],
+    strike=book["strike"],
+    maturity=book["maturity"],
+    rate=book["rate"],
+    dividend=book["dividend"],
+    volatility=book["volatility"],
+    is_call=True,
+    name="bs_price",
+)
 ```
 
-### `deltas_frame` / `gammas_frame` / `vegas_frame`
+### `deltas` / `gammas` / `vegas`
 
 **Units:** `maturity` years; `volatility` absolute; `vega` per 1.0 vol point.
 
@@ -502,13 +510,13 @@ df = pd.DataFrame({
     "volatility": [0.2, 0.2],
 })
 
-df = iv.deltas_frame(df, is_call=True, out="delta")
-df = iv.gammas_frame(df, out="gamma")
-df = iv.vegas_frame(df, out="vega")
+df["delta"] = iv.deltas(df["forward"], df["strike"], df["maturity"], df["volatility"], is_call=True)
+df["gamma"] = iv.gammas(df["forward"], df["strike"], df["maturity"], df["volatility"])
+df["vega"] = iv.vegas(df["forward"], df["strike"], df["maturity"], df["volatility"])
 print(df)
 ```
 
-### Chained helpers
+### Assign pipeline
 
 **Units:** same throughout — `maturity` years; `volatility` / recovered `iv` absolute; `vega` per 1.0 vol point.
 
@@ -516,16 +524,10 @@ print(df)
 import pandas as pd
 import iv_engine as iv
 
-raw = pd.DataFrame({"strike": [80.0, 100.0, 120.0]})
-result = (
-    iv.black_prices_frame(raw, forward=100.0, maturity=1.0, volatility=0.25, out="price")
-    .pipe(lambda d: iv.implied_volatilities_frame(
-        d, price="price", forward=100.0, maturity=1.0, out="iv"
-    ))
-    .pipe(lambda d: iv.vegas_frame(
-        d, forward=100.0, maturity=1.0, volatility="iv", out="vega"
-    ))
-)
+df = pd.DataFrame({"strike": [80.0, 100.0, 120.0]})
+df["price"] = iv.black_prices(100.0, df["strike"], 1.0, 0.25)
+df["iv"] = iv.implied_volatilities(df["price"], 100.0, df["strike"], 1.0)
+df["vega"] = iv.vegas(100.0, df["strike"], 1.0, df["iv"])
 ```
 
 ---
@@ -558,7 +560,7 @@ except iv.IVError as exc:
 | `invalid_input` | Non-finite inputs, slice length mismatch, … |
 | `no_convergence` | Extremely rare LBR failure |
 
-Missing DataFrame columns raise plain **`KeyError`**.
+Mismatched Series indexes raise **`ValueError`**. Passing a column name string by mistake raises **`TypeError`** (pass `df["col"]` instead).
 
 ### Length mismatch on `black_prices`
 
@@ -596,25 +598,17 @@ except iv.IVError as exc:
 | `delta` `gamma` `vega` `theta` `vomma` `vanna` | Black-76 Greeks |
 | `black_scholes_*` | Spot Greeks |
 
-### NumPy (plural)
+### NumPy / Pandas batch
 
-| Function | Role |
-|----------|------|
-| `norm_pdfs` / `norm_cdfs` / `norm_cdf_cs` | Batch Normal |
-| `black_prices` / `black_scholes_prices` | Batch prices |
-| `implied_volatilities` / `normalised_implied_volatilities` | Batch IV |
-| `deltas` / `gammas` / `vegas` | Batch Greeks |
+| Function | Role | Series → |
+|----------|------|----------|
+| `black_prices` / `black_scholes_prices` | Batch prices | `name="price"` |
+| `implied_volatilities` | Batch IV | `name="implied_vol"` |
+| `deltas` / `gammas` / `vegas` | Batch Greeks | `delta` / `gamma` / `vega` |
+| `norm_pdfs` / `norm_cdfs` / `norm_cdf_cs` | Batch Normal | (ndarray only) |
+| `normalised_implied_volatilities` | Batch normalised IV | (ndarray only) |
 
-Keyword: `parallel: bool = False` where applicable.
-
-### Pandas
-
-| Function | Default output column |
-|----------|------------------------|
-| `black_prices_frame` | `price` |
-| `black_scholes_prices_frame` | `price` |
-| `implied_volatilities_frame` | `implied_vol` |
-| `deltas_frame` / `gammas_frame` / `vegas_frame` | `delta` / `gamma` / `vega` |
+Keyword: `parallel: bool = True` by default. Pass any pandas ``Series`` and get a ``Series`` back; otherwise an ndarray.
 
 ---
 

@@ -1,7 +1,7 @@
 """iv_engine — Python bindings for the Rust numerical core.
 
-All numerical work happens in Rust. This package re-exports the compiled
-extension [`iv_engine._core`] (scalar + NumPy) and Pandas DataFrame helpers.
+All numerical work happens in Rust. Batch APIs in [`iv_engine.batch`] accept
+NumPy arrays or pandas ``Series`` and run in parallel by default.
 """
 
 from __future__ import annotations
@@ -12,21 +12,16 @@ from iv_engine._core import (
     black_intrinsic,
     black_price,
     black_price_total_vol,
-    black_prices,
     black_scholes_delta,
     black_scholes_forward,
     black_scholes_gamma,
     black_scholes_price,
-    black_scholes_prices,
     black_scholes_theta,
     black_scholes_vanna,
     black_scholes_vega,
     black_scholes_vomma,
     delta,
-    deltas,
     gamma,
-    gammas,
-    implied_volatilities,
     implied_volatility,
     log_moneyness,
     norm_cdf,
@@ -40,16 +35,15 @@ from iv_engine._core import (
     theta,
     vanna,
     vega,
-    vegas,
     vomma,
 )
-from iv_engine.dataframe import (
-    black_prices_frame,
-    black_scholes_prices_frame,
-    deltas_frame,
-    gammas_frame,
-    implied_volatilities_frame,
-    vegas_frame,
+from iv_engine.batch import (
+    black_prices,
+    black_scholes_prices,
+    deltas,
+    gammas,
+    implied_volatilities,
+    vegas,
 )
 
 __all__ = [
@@ -59,25 +53,20 @@ __all__ = [
     "black_price",
     "black_price_total_vol",
     "black_prices",
-    "black_prices_frame",
     "black_scholes_delta",
     "black_scholes_forward",
     "black_scholes_gamma",
     "black_scholes_price",
     "black_scholes_prices",
-    "black_scholes_prices_frame",
     "black_scholes_theta",
     "black_scholes_vanna",
     "black_scholes_vega",
     "black_scholes_vomma",
     "delta",
     "deltas",
-    "deltas_frame",
     "gamma",
     "gammas",
-    "gammas_frame",
     "implied_volatilities",
-    "implied_volatilities_frame",
     "implied_volatility",
     "log_moneyness",
     "norm_cdf",
@@ -92,6 +81,5 @@ __all__ = [
     "vanna",
     "vega",
     "vegas",
-    "vegas_frame",
     "vomma",
 ]

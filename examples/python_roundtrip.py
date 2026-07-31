@@ -26,15 +26,23 @@ def main() -> None:
     ivs = iv.implied_volatilities(prices, 100.0, strikes, 1.0)
     print(f"numpy:  max |iv-0.25| = {np.max(np.abs(ivs - 0.25)):.3e}")
 
-    # Pandas
+    # Pandas — same names; Series in → Series out
     df = pd.DataFrame({"strike": strikes})
-    priced = iv.black_prices_frame(
-        df, forward=100.0, maturity=1.0, volatility=0.25, is_call=True
+    df["price"] = iv.black_prices(
+        forward=100.0,
+        strike=df["strike"],
+        maturity=1.0,
+        volatility=0.25,
+        is_call=True,
     )
-    recovered = iv.implied_volatilities_frame(
-        priced, forward=100.0, maturity=1.0, is_call=True
+    df["implied_vol"] = iv.implied_volatilities(
+        price=df["price"],
+        forward=100.0,
+        strike=df["strike"],
+        maturity=1.0,
+        is_call=True,
     )
-    print(recovered[["strike", "price", "implied_vol"]].to_string(index=False))
+    print(df[["strike", "price", "implied_vol"]].to_string(index=False))
 
 
 if __name__ == "__main__":
