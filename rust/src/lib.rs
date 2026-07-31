@@ -19,7 +19,7 @@
 //! | [`black_price`]          | 3     | Ready    |
 //! | [`black_scholes_price`]  | 3     | Ready    |
 //! | [`greeks`]               | 4     | Ready    |
-//! | Implied volatility (LBR) | 5     | Planned  |
+//! | Implied volatility (LBR) | 5     | Ready    |
 //! | Vector / parallel / SIMD | 7–9   | Planned  |
 //!
 //! ## Error handling
@@ -58,3 +58,4 @@ pub use greeks::{
     black_scholes_vega, black_scholes_vomma, delta, gamma, theta, vanna, vega, vomma,
 };
 pub use normal::{norm_cdf, norm_cdf_c, norm_pdf};
+pub use rational::{implied_volatility, normalised_implied_volatility};

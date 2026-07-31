@@ -14,8 +14,8 @@ logic is implemented in Python.
 | 1     | Workspace, errors, constants, module shells | Done          |
 | 2     | Normal PDF / CDF                           | Done          |
 | 3     | Black-76 / Black–Scholes pricing           | Done          |
-| 4     | Greeks                                     | **Current**   |
-| 5     | Let's Be Rational IV                       | Pending       |
+| 4     | Greeks                                     | Done          |
+| 5     | Let's Be Rational IV                       | **Current**   |
 | 6     | Reference validation                       | Pending       |
 | 7     | Vector API                                 | Pending       |
 | 8     | Rayon parallelism                          | Pending       |
@@ -51,6 +51,7 @@ cargo fmt --check
 cargo bench -p iv-engine --bench normal
 cargo bench -p iv-engine --bench black
 cargo bench -p iv-engine --bench greeks
+cargo bench -p iv-engine --bench implied_volatility
 ```
 
 ## References

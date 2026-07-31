@@ -1,12 +1,7 @@
-//! Householder refinement of the implied total volatility.
-//!
-//! # Status
-//!
-//! Implemented in **Phase 5**.
-//!
-//! Uses the first three derivatives of the normalised Black function to
-//! apply a cubic Householder update. Iteration count is capped by
-//! [`crate::constants::MAX_IV_ITERATIONS`].
+//! Householder correction primitives used by the LBR inverse.
 
-/// Development-phase marker (5). Removed once the module is populated.
-pub const PHASE: u8 = 5;
+/// LBR's third-order Householder correction factor.
+#[inline]
+pub(crate) fn householder_factor(newton: f64, halley: f64, hh3: f64) -> f64 {
+    (1.0 + 0.5 * halley * newton) / (1.0 + newton * (halley + hh3 * newton / 6.0))
+}

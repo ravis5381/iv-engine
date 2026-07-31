@@ -31,10 +31,14 @@
 //! Jäckel, P. (2015). *Let's Be Rational*. Wilmott, 2015(75), 40–53.
 //! <http://www.jaeckel.org/LetsBeRational.pdf>
 
+#![allow(clippy::all, clippy::pedantic, clippy::nursery)]
+
+mod erfcx;
 pub mod initial_guess;
 pub mod interpolation;
+mod inv_norm;
 pub mod inverse;
+mod normalised_black;
 pub mod refinement;
 
-/// Development-phase marker (5). Removed once the module is populated.
-pub const PHASE: u8 = 5;
+pub use inverse::{implied_volatility, normalised_implied_volatility};

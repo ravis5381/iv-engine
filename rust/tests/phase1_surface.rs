@@ -89,18 +89,15 @@ fn rejects_non_finite_via_helper() {
 }
 
 #[test]
-fn modules_are_linked_with_phase_markers() {
-    // Exercise implemented APIs; touch pending modules via phase markers.
+fn modules_are_linked_with_implemented_apis() {
     assert!(iv_engine::norm_pdf(0.0) > 0.0);
     assert!(iv_engine::black_price(100.0, 100.0, 1.0, 0.2, true).unwrap() > 0.0);
     assert!(iv_engine::black_scholes_price(100.0, 100.0, 1.0, 0.0, 0.0, 0.2, true).unwrap() > 0.0);
     assert!(iv_engine::delta(100.0, 100.0, 1.0, 0.2, true).unwrap() > 0.0);
     assert!(iv_engine::vega(100.0, 100.0, 1.0, 0.2).unwrap() > 0.0);
-    assert_eq!(iv_engine::rational::PHASE, 5);
-    assert_eq!(iv_engine::rational::interpolation::PHASE, 5);
-    assert_eq!(iv_engine::rational::initial_guess::PHASE, 5);
-    assert_eq!(iv_engine::rational::inverse::PHASE, 5);
-    assert_eq!(iv_engine::rational::refinement::PHASE, 5);
+    let price = iv_engine::black_price(100.0, 100.0, 1.0, 0.2, true).unwrap();
+    let iv = iv_engine::implied_volatility(price, 100.0, 100.0, 1.0, true).unwrap();
+    assert!((iv - 0.2).abs() < 1e-12, "recovered {iv}");
     assert_eq!(iv_engine::vector::PHASE, 7);
     assert_eq!(iv_engine::parallel::PHASE, 8);
 }
