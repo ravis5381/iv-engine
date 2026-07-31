@@ -610,6 +610,16 @@ except iv.IVError as exc:
 
 Keyword: `parallel: bool = True` by default. Pass any pandas ``Series`` and get a ``Series`` back; otherwise an ndarray.
 
+### Profiling (1M rows)
+
+```bash
+# standalone
+python ../examples/profile_million.py
+
+# or pytest (opt-in; skipped by default)
+pytest tests/test_profile.py -m profile -s
+```
+
 ---
 
 ## Design notes

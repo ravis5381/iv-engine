@@ -36,3 +36,7 @@ features = ["pyo3/extension-module"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "profile: large (1M-row) timing benchmarks; run with: pytest -m profile -s",
+]
+addopts = "-m 'not profile'"

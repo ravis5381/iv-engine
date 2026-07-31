@@ -63,7 +63,7 @@ jobs:
           . .venv/bin/activate
           pip install -U pip maturin pytest numpy pandas
           maturin develop
-          pytest
+          pytest -m "not profile"
 
       - name: Clippy (bindings)
         run: cargo clippy -p iv-engine-py -- -D warnings
