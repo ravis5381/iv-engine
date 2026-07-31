@@ -94,7 +94,8 @@ fn modules_are_linked_with_phase_markers() {
     assert!(iv_engine::norm_pdf(0.0) > 0.0);
     assert!(iv_engine::black_price(100.0, 100.0, 1.0, 0.2, true).unwrap() > 0.0);
     assert!(iv_engine::black_scholes_price(100.0, 100.0, 1.0, 0.0, 0.0, 0.2, true).unwrap() > 0.0);
-    assert_eq!(iv_engine::greeks::PHASE, 4);
+    assert!(iv_engine::delta(100.0, 100.0, 1.0, 0.2, true).unwrap() > 0.0);
+    assert!(iv_engine::vega(100.0, 100.0, 1.0, 0.2).unwrap() > 0.0);
     assert_eq!(iv_engine::rational::PHASE, 5);
     assert_eq!(iv_engine::rational::interpolation::PHASE, 5);
     assert_eq!(iv_engine::rational::initial_guess::PHASE, 5);

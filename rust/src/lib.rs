@@ -18,7 +18,7 @@
 //! | [`normal`] PDF / CDF     | 2     | Ready    |
 //! | [`black_price`]          | 3     | Ready    |
 //! | [`black_scholes_price`]  | 3     | Ready    |
-//! | Greeks                   | 4     | Planned  |
+//! | [`greeks`]               | 4     | Ready    |
 //! | Implied volatility (LBR) | 5     | Planned  |
 //! | Vector / parallel / SIMD | 7–9   | Planned  |
 //!
@@ -53,4 +53,8 @@ pub use constants::{
     PRICE_ROUNDTRIP_ABS, PRICE_ROUNDTRIP_TOL, SQRT_PI_OVER_TWO, SQRT_TWO, SQRT_TWO_PI, TWO_PI,
 };
 pub use errors::IVError;
+pub use greeks::{
+    black_scholes_delta, black_scholes_gamma, black_scholes_theta, black_scholes_vanna,
+    black_scholes_vega, black_scholes_vomma, delta, gamma, theta, vanna, vega, vomma,
+};
 pub use normal::{norm_cdf, norm_cdf_c, norm_pdf};

@@ -205,10 +205,9 @@ pub(crate) fn validate_black_inputs(
 /// Returns `(d1, d2, total_vol)`. When `total_vol == 0`, both `d`s are `±∞`
 /// according to the sign of log-moneyness (or `NaN` if ATM and `s = 0`).
 ///
-/// Reserved for analytical Greeks (Phase 4); kept `pub(crate)` so the
-/// pricing and greeks modules share one definition.
+/// Reserved for analytical Greeks; kept `pub(crate)` so the pricing and
+/// greeks modules share one definition.
 #[inline]
-#[allow(dead_code)] // used by unit tests; Greeks (Phase 4) will call this
 pub(crate) fn black_d1_d2(
     forward: f64,
     strike: f64,

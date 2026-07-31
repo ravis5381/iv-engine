@@ -37,6 +37,10 @@ harness = false
 name = "black"
 harness = false
 
+[[bench]]
+name = "greeks"
+harness = false
+
 [lints.rust]
 unsafe_code = "warn"
 missing_docs = "warn"
@@ -60,7 +64,7 @@ unreadable_literal = { level = "allow", priority = 1 }
 cast_possible_truncation = { level = "allow", priority = 1 }
 cast_sign_loss = { level = "allow", priority = 1 }
 inconsistent_digit_grouping = { level = "allow", priority = 1 }
-while_float = { level = "allow", priority = 1 }
+option_if_let_else = { level = "allow", priority = 1 }
 
 [package.metadata.docs.rs]
 all-features = true
