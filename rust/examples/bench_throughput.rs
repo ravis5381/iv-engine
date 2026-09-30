@@ -71,7 +71,11 @@ fn print_scalar() -> Result<(), IVError> {
     );
 
     println!("Scalar (median-ish single call, {SCALAR_ITERS} repeats)");
-    println!("  black_price ATM          {:>8.1} ns/call  ({:>10.0} calls/s)", bp * 1e9, 1.0 / bp);
+    println!(
+        "  black_price ATM          {:>8.1} ns/call  ({:>10.0} calls/s)",
+        bp * 1e9,
+        1.0 / bp
+    );
     println!(
         "  implied_volatility ATM   {:>8.1} ns/call  ({:>10.0} calls/s)",
         iv * 1e9,
@@ -80,17 +84,10 @@ fn print_scalar() -> Result<(), IVError> {
     Ok(())
 }
 
-fn bench_iv_batch(
-    label: &str,
-    n: usize,
-    run: impl Fn(&[f64], &[f64], &[f64], &[f64], &mut [f64]),
-) {
+fn bench_iv_batch(label: &str, n: usize, run: impl Fn(&[f64], &[f64], &[f64], &[f64], &mut [f64])) {
     let (f, k, t, _v, prices) = make_book(n, 42);
     let mut out = vec![0.0; n];
-    let sec = time_secs(
-        || run(&prices, &f, &k, &t, &mut out),
-        BATCH_ITERS,
-    );
+    let sec = time_secs(|| run(&prices, &f, &k, &t, &mut out), BATCH_ITERS);
     let rows_per_sec = n as f64 / sec;
     println!("  {label:<28} n={n:>7}  {sec:>8.3} s/run  {rows_per_sec:>12.0} rows/s");
 }
