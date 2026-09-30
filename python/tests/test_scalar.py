@@ -10,7 +10,7 @@ import iv_engine as iv
 
 
 def test_version():
-    assert iv.__version__ == "0.1.0"
+    assert iv.__version__ == "0.1.1"
 
 
 def test_norm_pdf_at_zero():

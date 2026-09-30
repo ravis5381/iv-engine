@@ -5,10 +5,21 @@ Python bindings for the Rust **iv-engine** numerical core (PyO3 / maturin).
 All pricing, Greeks, and Let's Be Rational implied volatility run in Rust.
 This package only wraps those kernels — it does not reimplement any math.
 
+**On PyPI:** this file is the project README shown on [pypi.org/project/iv-engine](https://pypi.org/project/iv-engine/).
+
 | Layer | What you get |
 |-------|----------------|
 | Scalar | Single-value floats |
 | Batch | 1-D `float64` arrays or pandas `Series` (parallel by default) |
+
+---
+
+## Jupyter notebook
+
+Step-by-step examples (install, units, pricing, IV, Greeks, batch APIs):
+
+- **Open in GitHub:** [python/examples/python_examples.ipynb](https://github.com/ravis5381/iv-engine/blob/master/python/examples/python_examples.ipynb)
+- **Local (clone or sdist):** `python/examples/python_examples.ipynb` — run with `jupyter notebook` or VS Code after `pip install '.[pandas]' jupyter`
 
 ---
 
@@ -652,7 +663,9 @@ More context: repository [`docs/API.md`](../docs/API.md) and [`examples/python_r
 
 ## License
 
-The **iv-engine** package is licensed under the [MIT License](../LICENSE).
+The **iv-engine** package is licensed under the
+[MIT License](https://github.com/ravis5381/iv-engine/blob/master/LICENSE).
 
 Implied volatility uses Peter Jäckel's *Let's Be Rational* method; see
-[NOTICE](../NOTICE) for the paper citation and reference-software attribution.
+[NOTICE](https://github.com/ravis5381/iv-engine/blob/master/NOTICE) for the
+paper citation and reference-software attribution.

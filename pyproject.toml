@@ -11,7 +11,7 @@
 
 [project]
 name = "iv-engine"
-version = "0.1.0"
+version = "0.1.1"
 description = "Implied volatility and Black/Black-Scholes via Let's Be Rational"
 readme = "python/README.md"
 requires-python = ">=3.9"
@@ -37,7 +37,10 @@ dev = ["pytest>=7.0", "pandas>=1.5"]
 pandas = ["pandas>=1.5"]
 
 [project.urls]
+Homepage = "https://github.com/ravis5381/iv-engine"
+Documentation = "https://github.com/ravis5381/iv-engine/tree/master/python#readme"
 Repository = "https://github.com/ravis5381/iv-engine"
+Examples = "https://github.com/ravis5381/iv-engine/blob/master/python/examples/python_examples.ipynb"
 
 [build-system]
 requires = ["maturin>=1.4,<2.0"]
@@ -48,6 +51,8 @@ manifest-path = "python/Cargo.toml"
 module-name = "iv_engine._core"
 python-source = "python"
 features = ["pyo3/extension-module"]
+# Shipped in sdist (and linked from python/README.md on PyPI).
+include = ["python/examples/*.ipynb"]
 
 [tool.pytest.ini_options]
 testpaths = ["python/tests"]

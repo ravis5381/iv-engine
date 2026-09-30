@@ -26,6 +26,11 @@ Docs.rs builds with `all-features` (configured in `rust/Cargo.toml`).
 The installable package is defined by the **workspace-root** [`pyproject.toml`](../pyproject.toml)
 so `rust/` and `python/` are both included in the source distribution.
 
+PyPI renders [`python/README.md`](../python/README.md) as the project description
+(`readme = "python/README.md"`). The Jupyter notebook lives at
+[`python/examples/python_examples.ipynb`](../python/examples/python_examples.ipynb)
+(included in sdists via `[tool.maturin] include`).
+
 PyPI metadata uses SPDX `license = "MIT"` with `license-files = ["LICENSE", "NOTICE"]`.
 [`NOTICE`](../NOTICE) cites Jäckel's *Let's Be Rational* paper and preserves the
 reference-software attribution notice from www.jaeckel.org/LetsBeRational.7z.
@@ -113,4 +118,4 @@ pip install 'iv-engine[pandas]' # + Pandas Series support
 ## Versioning
 
 Keep workspace `version` and both `pyproject.toml` `version` fields in sync
-(currently `0.1.0`). Record changes in [`CHANGELOG.md`](../CHANGELOG.md).
+(currently `0.1.1`). Record changes in [`CHANGELOG.md`](../CHANGELOG.md).
