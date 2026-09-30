@@ -37,7 +37,7 @@ dev = ["pytest>=7.0", "pandas>=1.5"]
 pandas = ["pandas>=1.5"]
 
 [project.urls]
-Repository = "ssh://git@git_server/ravi.singh/bsm-iv-engine.git"
+Repository = "https://github.com/ravis5381/iv-engine"
 
 [build-system]
 requires = ["maturin>=1.4,<2.0"]
