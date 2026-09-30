@@ -94,7 +94,7 @@ pub(crate) const fn require_out_len(out_len: usize, n: usize) -> Result<(), IVEr
 }
 
 #[inline]
-pub(crate) fn at(slice: &[f64], i: usize) -> f64 {
+pub(crate) const fn at(slice: &[f64], i: usize) -> f64 {
     // SAFETY of indexing: callers only invoke with i < n and slice.len() is
     // either 1 or n (enforced by resolve_batch_len + require_out_len).
     if slice.len() == 1 {

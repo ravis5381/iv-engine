@@ -19,6 +19,8 @@ const WARMUP: u32 = 3;
 const SCALAR_ITERS: u32 = 500_000;
 const BATCH_ITERS: u32 = 3;
 
+type Book = (Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>);
+
 fn time_secs<F: FnMut()>(mut f: F, iters: u32) -> f64 {
     for _ in 0..WARMUP {
         f();
@@ -30,7 +32,7 @@ fn time_secs<F: FnMut()>(mut f: F, iters: u32) -> f64 {
     t0.elapsed().as_secs_f64() / f64::from(iters)
 }
 
-fn make_book(n: usize, seed: u64) -> (Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>) {
+fn make_book(n: usize, seed: u64) -> Book {
     let mut rng = seed;
     let mut next = || {
         rng = rng.wrapping_mul(6364136223846793005).wrapping_add(1);
@@ -68,7 +70,7 @@ fn print_scalar() -> Result<(), IVError> {
         SCALAR_ITERS,
     );
 
-    println!("Scalar (median-ish single call, {} repeats)", SCALAR_ITERS);
+    println!("Scalar (median-ish single call, {SCALAR_ITERS} repeats)");
     println!("  black_price ATM          {:>8.1} ns/call  ({:>10.0} calls/s)", bp * 1e9, 1.0 / bp);
     println!(
         "  implied_volatility ATM   {:>8.1} ns/call  ({:>10.0} calls/s)",
@@ -90,14 +92,11 @@ fn bench_iv_batch(
         BATCH_ITERS,
     );
     let rows_per_sec = n as f64 / sec;
-    println!(
-        "  {:<28} n={:>7}  {:>8.3} s/run  {:>12.0} rows/s",
-        label, n, sec, rows_per_sec
-    );
+    println!("  {label:<28} n={n:>7}  {sec:>8.3} s/run  {rows_per_sec:>12.0} rows/s");
 }
 
 fn print_batch() {
-    println!("\nBatch implied_volatility_slice ({} runs, new book each size)", BATCH_ITERS);
+    println!("\nBatch implied_volatility_slice ({BATCH_ITERS} runs, new book each size)");
 
     for &n in &[10_000, 100_000, 1_000_000] {
         bench_iv_batch("serial", n, |prices, f, k, t, out| {
