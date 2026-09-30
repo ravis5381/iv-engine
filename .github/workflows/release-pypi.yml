@@ -172,11 +172,22 @@ jobs:
       - name: List dist
         run: ls -la dist/
 
-      - name: Publish to PyPI
-        uses: PyO3/maturin-action@v1
-        env:
-          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Require PyPI token secret
+        run: |
+          if [ -z "${{ secrets.PYPI_API_TOKEN }}" ]; then
+            echo "::error::Missing Actions secret PYPI_API_TOKEN (see docs/PUBLISHING.md)"
+            exit 1
+          fi
+
+      - uses: actions/setup-python@v5
         with:
-          maturin-version: "v${{ env.MATURIN_VERSION }}"
-          command: upload
-          args: --non-interactive --skip-existing dist/*
+          python-version: "3.12"
+
+      - name: Upload to PyPI with twine
+        run: |
+          pip install twine
+          twine check dist/*
+          twine upload --non-interactive --skip-existing dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}

@@ -63,9 +63,20 @@ Workflow: [`.github/workflows/release-pypi.yml`](../.github/workflows/release-py
 **One-time setup**
 
 1. Create a [PyPI API token](https://pypi.org/manage/account/token/) (scope: project `iv-engine` after the first upload, or entire account for the first release).
-2. In GitHub: **Settings → Secrets and variables → Actions** → New repository secret  
-   `PYPI_API_TOKEN` = the token value.
-3. Optional: create a **pypi** [environment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) on the repo so publishes require approval.
+2. In GitHub repo **Settings → Secrets and variables → Actions** → **New repository secret**  
+   - Name (exactly): `PYPI_API_TOKEN`  
+   - Value: the full token string from PyPI, including the `pypi-` prefix (no quotes, no trailing newline).
+3. **First release only:** token scope must be **Entire account** (or use “Upload packages” on a project token only *after* `iv-engine` exists on PyPI). A project-scoped token for a name that is not registered yet returns **403 Invalid auth**.
+4. Optional: create a **pypi** [environment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) on the repo so publishes require approval.
+
+**403 on upload**
+
+| Check | Fix |
+|-------|-----|
+| Secret name | Must be `PYPI_API_TOKEN`, not `PYPI_TOKEN` or similar |
+| Token type | PyPI **API token** from pypi.org (not TestPyPI unless you change the upload URL) |
+| First upload | Use account-wide token once, then rotate to project-scoped |
+| Regenerate | Revoke old token, create new, update GitHub secret |
 
 **Release**
 
