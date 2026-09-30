@@ -38,8 +38,7 @@ jobs:
       - name: Set package version from tag
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          pip install "maturin==${MATURIN_VERSION}"
-          maturin version --set "$VERSION"
+          python3 .github/scripts/set_version_from_tag.py "$VERSION"
 
       - name: Build wheels
         uses: PyO3/maturin-action@v1
@@ -80,8 +79,7 @@ jobs:
         shell: bash
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          pip install "maturin==${MATURIN_VERSION}"
-          maturin version --set "$VERSION"
+          python3 .github/scripts/set_version_from_tag.py "$VERSION"
 
       - name: Build wheels
         uses: PyO3/maturin-action@v1
@@ -117,8 +115,7 @@ jobs:
       - name: Set package version from tag
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          pip install "maturin==${MATURIN_VERSION}"
-          maturin version --set "$VERSION"
+          python3 .github/scripts/set_version_from_tag.py "$VERSION"
 
       - name: Build wheels
         uses: PyO3/maturin-action@v1
@@ -146,8 +143,7 @@ jobs:
       - name: Set package version from tag
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          pip install "maturin==${MATURIN_VERSION}"
-          maturin version --set "$VERSION"
+          python3 .github/scripts/set_version_from_tag.py "$VERSION"
 
       - name: Build sdist
         uses: PyO3/maturin-action@v1

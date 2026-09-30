@@ -69,7 +69,7 @@ Workflow: [`.github/workflows/release-pypi.yml`](../.github/workflows/release-py
 
 **Release**
 
-1. Bump `version` in root `pyproject.toml`, `python/pyproject.toml`, and workspace `Cargo.toml` (or rely on the workflow — it runs `maturin version --set` from the tag).
+1. Bump `version` in root `pyproject.toml`, `python/pyproject.toml`, and workspace `Cargo.toml` (optional — the release workflow syncs them from the tag via `.github/scripts/set_version_from_tag.py`).
 2. Commit, tag, and push:
 
 ```bash
