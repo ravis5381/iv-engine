@@ -170,24 +170,14 @@ jobs:
           merge-multiple: true
 
       - name: List dist
-        run: ls -la dist/
-
-      - name: Require PyPI token secret
-        run: |
-          if [ -z "${{ secrets.PYPI_API_TOKEN }}" ]; then
-            echo "::error::Missing Actions secret PYPI_API_TOKEN (see docs/PUBLISHING.md)"
-            exit 1
-          fi
+        run: find dist -type f | sort
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
       - name: Upload to PyPI with twine
-        run: |
-          pip install twine
-          twine check dist/*
-          twine upload --non-interactive --skip-existing dist/*
+        run: bash scripts/upload_pypi.sh dist
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}

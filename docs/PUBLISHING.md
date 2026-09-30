@@ -41,19 +41,30 @@ pip install -e '.[dev]'
 
 ### Build wheels locally
 
+From the repository root:
+
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -U pip maturin twine
-maturin build --release
-# wheels under target/wheels/
-twine upload target/wheels/*
+source .venv/bin/activate   # optional
+./scripts/build_dist.sh     # writes wheel + sdist to dist/
+twine check dist/*          # validate only; no upload
 ```
 
-Source distribution:
+Or manually (same output paths):
 
 ```bash
-maturin sdist
-twine upload target/wheels/*.tar.gz
+pip install -U maturin
+maturin build --release --out dist
+maturin sdist --out dist
+```
+
+**Upload** ( `--out` is for maturin only, not twine):
+
+```bash
+export TWINE_USERNAME=__token__
+export TWINE_PASSWORD='pypi-...'   # one line each; full pypi- token
+
+./scripts/upload_pypi.sh dist
+# or: twine upload --non-interactive dist/*.whl dist/*.tar.gz
 ```
 
 ### Automated release (GitHub Actions)
