@@ -647,3 +647,12 @@ pytest tests/test_profile.py -m profile -s
 - **Arrays** must be contiguous `float64` (NumPy’s default for `linspace` / `astype(float)` is fine; use `np.ascontiguousarray` if you sliced oddly).
 
 More context: repository [`docs/API.md`](../docs/API.md) and [`examples/python_roundtrip.py`](../examples/python_roundtrip.py).
+
+---
+
+## License
+
+The **iv-engine** package is licensed under the [MIT License](../LICENSE).
+
+Implied volatility uses Peter Jäckel's *Let's Be Rational* method; see
+[NOTICE](../NOTICE) for the paper citation and reference-software attribution.

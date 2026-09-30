@@ -1,0 +1,39 @@
+iv-engine
+=========
+
+Copyright (c) 2026 iv-engine contributors
+
+Licensed under the MIT License; see LICENSE for the full text.
+
+
+Let's Be Rational (algorithm attribution)
+=========================================
+
+The implied-volatility routines implement the method described in:
+
+  Jäckel, Peter (2015). "Let's Be Rational". Wilmott Magazine, 2015(75), 40–53.
+  http://www.jaeckel.org/LetsBeRational.pdf
+
+Behavior is validated against Peter Jäckel's reference C++ sources
+(www.jaeckel.org/LetsBeRational.7z). The Rust implementation in this
+repository is written independently and does not ship those reference files.
+
+
+Peter Jäckel reference software (notice preserved)
+==================================================
+
+The following notice applies to Peter Jäckel's reference implementation
+(LetsBeRational.7z / LetsBeRational.cpp). It is reproduced here for
+attribution when publishing derivatives or reimplementations that follow
+that reference, as recommended by the author and by downstream packages
+such as vollib/lets_be_rational.
+
+Copyright © 2013-2014 Peter Jäckel.
+
+Permission to use, copy, modify, and distribute this software is freely granted,
+provided that this notice is preserved.
+
+WARRANTY DISCLAIMER
+The Software is provided "as is" without warranty of any kind, either express or implied,
+including without limitation any implied warranties of condition, uninterrupted use,
+merchantability, fitness for a particular purpose, or non-infringement.

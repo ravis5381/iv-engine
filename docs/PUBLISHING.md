@@ -26,6 +26,10 @@ Docs.rs builds with `all-features` (configured in `rust/Cargo.toml`).
 The installable package is defined by the **workspace-root** [`pyproject.toml`](../pyproject.toml)
 so `rust/` and `python/` are both included in the source distribution.
 
+PyPI metadata uses SPDX `license = "MIT"` with `license-files = ["LICENSE", "NOTICE"]`.
+[`NOTICE`](../NOTICE) cites Jäckel's *Let's Be Rational* paper and preserves the
+reference-software attribution notice from www.jaeckel.org/LetsBeRational.7z.
+
 ### Install from a git clone
 
 ```bash
