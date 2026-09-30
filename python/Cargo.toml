@@ -15,7 +15,7 @@ path = "src/lib.rs"
 
 [dependencies]
 iv-engine = { path = "../rust", features = ["rayon"] }
-pyo3 = { version = "0.22", features = ["extension-module"] }
+pyo3 = { version = "0.22", features = ["extension-module", "abi3-py39"] }
 numpy = "0.22"
 
 [lints.rust]

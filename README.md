@@ -69,7 +69,7 @@ pytest
 
 **Benchmarks:** `cargo run -p iv-engine --release --example bench_throughput` — see [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
-Optional crate features: `rayon` (parallel batch), `simd` (vectorised normal PDF). See [docs/PUBLISHING.md](docs/PUBLISHING.md) for crates.io / PyPI release steps.
+Optional crate features: `rayon` (parallel batch), `simd` (vectorised normal PDF). PyPI releases are automated on `v*` tags — see [docs/PUBLISHING.md](docs/PUBLISHING.md).
 
 ## Documentation
 

@@ -56,7 +56,30 @@ maturin sdist
 twine upload target/wheels/*.tar.gz
 ```
 
-CI can publish on tagged releases using `PyO3/maturin-action` and a PyPI token.
+### Automated release (GitHub Actions)
+
+Workflow: [`.github/workflows/release-pypi.yml`](../.github/workflows/release-pypi.yml)
+
+**One-time setup**
+
+1. Create a [PyPI API token](https://pypi.org/manage/account/token/) (scope: project `iv-engine` after the first upload, or entire account for the first release).
+2. In GitHub: **Settings → Secrets and variables → Actions** → New repository secret  
+   `PYPI_API_TOKEN` = the token value.
+3. Optional: create a **pypi** [environment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) on the repo so publishes require approval.
+
+**Release**
+
+1. Bump `version` in root `pyproject.toml`, `python/pyproject.toml`, and workspace `Cargo.toml` (or rely on the workflow — it runs `maturin version --set` from the tag).
+2. Commit, tag, and push:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The workflow builds **manylinux** wheels (`x86_64`, `aarch64`), **Windows** (`x64`, `arm64`), **macOS** (`x86_64`, `aarch64`), an **sdist**, and uploads all artifacts to PyPI. Wheels use PyO3 **abi3** (Python ≥ 3.9).
+
+Tags must look like `v0.1.0` (leading `v`); the published version is `0.1.0`.
 
 ### Optional extras
 
