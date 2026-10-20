@@ -74,16 +74,8 @@ pub fn black_scholes_price(
         return Err(IVError::invalid("spot must be positive"));
     }
 
-    // Re-use Black validators for K, T, σ (also rejects non-finite strike etc.).
-    // Forward is checked after the exponential map.
-    validate_black_inputs(spot, strike, maturity, volatility)?;
-
     let forward = black_scholes_forward(spot, maturity, rate, dividend)?;
-    if !is_finite(forward) || forward <= 0.0 {
-        return Err(IVError::invalid(
-            "non-finite or non-positive forward from spot/rates",
-        ));
-    }
+    validate_black_inputs(forward, strike, maturity, volatility)?;
 
     let discount = (-rate * maturity).exp();
     if !is_finite(discount) {

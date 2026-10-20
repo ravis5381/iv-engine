@@ -248,8 +248,8 @@ fn bs_setup(
     if spot <= 0.0 {
         return Err(IVError::invalid("spot must be positive"));
     }
-    validate_black_inputs(spot, strike, maturity, volatility)?;
     let forward = black_scholes_forward(spot, maturity, rate, dividend)?;
+    validate_black_inputs(forward, strike, maturity, volatility)?;
     let discount = (-rate * maturity).exp();
     let div_df = (-dividend * maturity).exp();
     if !(is_finite(discount) && is_finite(div_df)) {
