@@ -1,0 +1,29 @@
+# Install: pip install pre-commit && pre-commit install
+# Run all hooks manually: pre-commit run --all-files
+#
+# Mirrors the Rust checks in .github/workflows/ci.yml (format + clippy).
+
+default_language_version:
+  python: python3
+
+repos:
+  - repo: local
+    hooks:
+      - id: cargo-fmt
+        name: cargo fmt (check)
+        entry: cargo fmt --all -- --check
+        language: system
+        types: [rust]
+        pass_filenames: false
+
+      - id: cargo-clippy-iv-engine
+        name: cargo clippy iv-engine
+        entry: bash -c 'RUSTFLAGS=-Dwarnings cargo clippy -p iv-engine --all-targets --all-features -- -D warnings'
+        language: system
+        pass_filenames: false
+
+      - id: cargo-clippy-iv-engine-py
+        name: cargo clippy iv-engine-py
+        entry: bash -c 'RUSTFLAGS=-Dwarnings cargo clippy -p iv-engine-py -- -D warnings'
+        language: system
+        pass_filenames: false

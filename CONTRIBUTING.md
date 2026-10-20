@@ -1,12 +1,26 @@
 # Contributing
 
+## Pre-commit (recommended)
+
+```bash
+pip install pre-commit
+pre-commit install          # git hook
+pre-commit run --all-files  # manual run
+```
+
+Without `pre-commit`, run the same Rust checks as CI:
+
+```bash
+./scripts/pre-commit-check.sh
+```
+
 ## Development
 
 ```bash
 # Rust
 cargo test -p iv-engine --all-features
-cargo clippy -p iv-engine --all-targets --all-features -- -D warnings
-cargo fmt --check
+RUSTFLAGS=-Dwarnings cargo clippy -p iv-engine --all-targets --all-features -- -D warnings
+cargo fmt --all -- --check
 
 # Python
 cd python

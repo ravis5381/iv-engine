@@ -74,8 +74,8 @@ fn error_display_is_stable_enough_for_ffi() {
 
     for err in cases {
         let msg = err.to_string();
-        assert!(!msg.is_empty());
-        assert!(!err.code().is_empty());
+        assert_ne!(msg, "");
+        assert_ne!(err.code(), "");
         // std::error::Error source is None for our leaf errors.
         assert!(std::error::Error::source(&err).is_none());
     }
