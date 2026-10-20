@@ -78,7 +78,7 @@ pub fn black_scholes_price(
     // Forward is checked after the exponential map.
     validate_black_inputs(spot, strike, maturity, volatility)?;
 
-    let forward = spot * ((rate - dividend) * maturity).exp();
+    let forward = black_scholes_forward(spot, maturity,rate, dividend);
     if !is_finite(forward) || forward <= 0.0 {
         return Err(IVError::invalid(
             "non-finite or non-positive forward from spot/rates",
